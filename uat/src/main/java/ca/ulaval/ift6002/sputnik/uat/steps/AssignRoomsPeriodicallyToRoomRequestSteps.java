@@ -28,7 +28,7 @@ import static org.junit.Assert.assertThat;
 public class AssignRoomsPeriodicallyToRoomRequestSteps extends StatefulStep<AssignRoomsStepsState> {
 
     private static final String EMAIL = "valid@uat.com";
-    private static final int FIVE = 5;
+    private final int FIVE = 5;
 
     protected AssignRoomsStepsState getInitialState() {
         return new AssignRoomsStepsState();
@@ -68,14 +68,14 @@ public class AssignRoomsPeriodicallyToRoomRequestSteps extends StatefulStep<Assi
     @Given("a room request with low priority")
     public void givenARoomRequestWithPriorityLow() {
         switchToPrioritySortingStrategy();
-        state().lowPriorityRequest = new RoomRequest(RequestIdentifier.create(), Priority.LOW, new User(EMAIL), new LinkedList<>());
+        state().lowPriorityRequest = new ca.ulaval.ift6002.sputnik.domain.request.RoomRequest(RequestIdentifier.create(), Priority.LOW, new User(EMAIL), new LinkedList<>());
         ReservationApplicationService reservationApplicationService = getReservationApplicationService();
         reservationApplicationService.addRequest(state().lowPriorityRequest);
     }
 
     @Given("a room request with high priority")
     public void givenARoomRequestWithPriorityHigh() {
-        state().highPriorityRequest = new RoomRequest(RequestIdentifier.create(), Priority.HIGH, new User(EMAIL), new LinkedList<>());
+        state().highPriorityRequest = new ca.ulaval.ift6002.sputnik.domain.request.RoomRequest(RequestIdentifier.create(), Priority.HIGH, new User(EMAIL), new LinkedList<>());
         ReservationApplicationService reservationApplicationService = getReservationApplicationService();
         reservationApplicationService.addRequest(state().highPriorityRequest);
     }
@@ -94,18 +94,18 @@ public class AssignRoomsPeriodicallyToRoomRequestSteps extends StatefulStep<Assi
 
     @Then("the room request with higher priority is assigned before")
     public void thenTheRoomRequestWithHigherPriorityIsAssignBefore() {
-        RoomRequest highPriorityRequest = findAssignedRequestWithRequest(state().highPriorityRequest);
-        RoomRequest lowPriorityRequest = findAssignedRequestWithRequest(state().lowPriorityRequest);
+        RoomRequest highPriorityReservation = findReservationWithRequest(state().highPriorityRequest);
+        RoomRequest lowPriorityReservation = findReservationWithRequest(state().lowPriorityRequest);
 
-        assertTrue(highPriorityRequest.getTimeOfAssignation().isBefore(lowPriorityRequest.getTimeOfAssignation()));
+        assertTrue(highPriorityReservation.getTimeOfAssignation().isBefore(lowPriorityReservation.getTimeOfAssignation()));
     }
 
     @Then("the first room request is assigned before the second request")
     public void thenTheFirstRoomRequestIsAssignBeforeTheSecondRequest() {
-        RoomRequest firstRequest = findAssignedRequestWithRequest(state().firstRequest);
-        RoomRequest secondRequest = findAssignedRequestWithRequest(state().secondRequest);
+        RoomRequest firstReservation = findReservationWithRequest(state().firstRequest);
+        RoomRequest secondReservation = findReservationWithRequest(state().secondRequest);
 
-        assertTrue(firstRequest.getTimeOfAssignation().isBefore(secondRequest.getTimeOfAssignation()));
+        assertTrue(firstReservation.getTimeOfAssignation().isBefore(secondReservation.getTimeOfAssignation()));
     }
 
     private RoomRepository getRoomRepository() {
@@ -127,7 +127,7 @@ public class AssignRoomsPeriodicallyToRoomRequestSteps extends StatefulStep<Assi
         ServiceLocator.getInstance().register(ReservationApplicationService.class, new ReservationApplicationService());
     }
 
-    private RoomRequest findAssignedRequestWithRequest(RoomRequest roomRequest) {
+    private RoomRequest findReservationWithRequest(ca.ulaval.ift6002.sputnik.domain.request.RoomRequest roomRequest) {
         RoomRequestRepository roomRequestRepository = getReservationRepository();
         RequestIdentifier identifier = roomRequest.getIdentifier();
         return roomRequestRepository.findReservationByIdentifier(identifier);

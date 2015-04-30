@@ -11,24 +11,29 @@ import java.util.Map;
 
 public class RoomRequestRepositoryInMemory implements RoomRequestRepository {
 
-    private Map<RequestIdentifier, RoomRequest> requests;
+    private Map<RequestIdentifier, RoomRequest> reservations;
 
     public RoomRequestRepositoryInMemory() {
-        requests = new HashMap<>();
+        reservations = new HashMap<>();
     }
 
     @Override
     public RoomRequest findReservationByIdentifier(RequestIdentifier reservationIdentifier) {
-        return requests.get(reservationIdentifier);
+        return reservations.get(reservationIdentifier);
     }
 
     @Override
     public List<RoomRequest> findAll() {
-        return new ArrayList<>(requests.values());
+        return new ArrayList<>(reservations.values());
+    }
+
+    @Override
+    public void update(RoomRequest roomRequest) {
+        persist(roomRequest);
     }
 
     @Override
     public void persist(RoomRequest reservation) {
-        requests.put(reservation.getIdentifier(), reservation);
+        reservations.put(reservation.getIdentifier(), reservation);
     }
 }

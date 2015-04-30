@@ -47,12 +47,32 @@ public class RoomTest {
     }
 
     @Test
+    public void whenAskedWithGoodRoomNumberWillReturnTrue() {
+        assertTrue(room.hasSameNumber(room));
+    }
+
+    @Test
+    public void whenAskedWithWrongRoomNumberWillReturnFalse() {
+        assertFalse(room.hasSameNumber(anotherRoom));
+    }
+
+    @Test
     public void whenRoomIsReserveThenReleasedShouldNotBeReserved() {
         room.reserve();
 
         room.release();
 
         assertFalse(room.isReserved());
+    }
+
+    @Test
+    public void whenRoomComparedWithSameRoomNumberShouldReturnTrue() {
+        assertTrue(room.hasNumber(room.getRoomNumber()));
+    }
+
+    @Test
+    public void whenRoomComparedWithDifferentRoomShouldReturnFalse() {
+        assertFalse(room.hasNumber(anotherRoom.getRoomNumber()));
     }
 
     @Test

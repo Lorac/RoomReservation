@@ -60,6 +60,7 @@ public class RoomRequestTest {
     @Test
     public void whenRoomRequestIsRefusedOrganizerIsNotified() {
         whenRoomRequestIsRefused();
+
         verify(notificationSender, times(1)).send(any(InsufficientRoomNotification.class));
     }
 
@@ -90,15 +91,6 @@ public class RoomRequestTest {
     }
 
     @Test
-    public void whenCancellingARoomRequestAlreadyProcessedThenNotificationIncludesRoomNumber() {
-        RoomRequest roomRequest = givenARoomRequestWithRoomAssigned();
-
-        roomRequest.cancel(notificationSender, notificationFactory);
-
-        verify(notificationFactory).createCanceledNotification(ROOM_NUMBER);
-    }
-
-    @Test
     public void whenAssigningARoomToRoomRequestItShouldHaveARoomAssigned() {
         RoomRequest roomRequest = givenARoomRequestWithRoomAssigned();
 
@@ -115,7 +107,7 @@ public class RoomRequestTest {
     }
 
     @Test
-    public void whenARoomRequestIsAcceptedThenNotificationIncludesRoomNumber() {
+    public void whenARoomRequestIsAcceptedTheRoomNumberIsSent() {
         RoomRequest roomRequest = givenARoomRequestWithRoomAssigned();
 
         roomRequest.confirm(notificationSender, notificationFactory);
@@ -147,5 +139,6 @@ public class RoomRequestTest {
         roomRequest.refuse(notificationSender, new NotificationFactory());
         return roomRequest;
     }
+
 
 }

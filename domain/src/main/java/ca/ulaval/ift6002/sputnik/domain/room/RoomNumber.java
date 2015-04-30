@@ -2,12 +2,23 @@ package ca.ulaval.ift6002.sputnik.domain.room;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 
-public class RoomNumber {
+import javax.persistence.Column;
+import javax.persistence.Embeddable;
+import java.io.Serializable;
 
-    private final String number;
+@Embeddable
+public class RoomNumber implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+
+    @Column(name = "ROOM_NUMBER", nullable = false)
+    private String number;
 
     public RoomNumber(String number) {
         this.number = number;
+    }
+
+    public RoomNumber() {
     }
 
     public boolean isSame(RoomNumber roomNumber) {
@@ -19,6 +30,10 @@ public class RoomNumber {
     }
 
     @Override
+    public int hashCode() {
+        return number.hashCode();
+    }
+
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
@@ -27,10 +42,5 @@ public class RoomNumber {
 
         return isSame(that);
 
-    }
-
-    @Override
-    public int hashCode() {
-        return number != null ? number.hashCode() : 0;
     }
 }

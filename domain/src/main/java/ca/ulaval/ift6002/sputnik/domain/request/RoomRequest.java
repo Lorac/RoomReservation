@@ -8,19 +8,36 @@ import ca.ulaval.ift6002.sputnik.domain.room.Room;
 import ca.ulaval.ift6002.sputnik.domain.room.RoomNumber;
 import ca.ulaval.ift6002.sputnik.domain.user.User;
 
+import javax.persistence.*;
+import javax.xml.bind.annotation.XmlTransient;
+import java.io.Serializable;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-public class RoomRequest {
+@Entity(name = "DEMANDE")
+public class RoomRequest implements Serializable {
 
+    @XmlTransient
     private final static int ADD_ORGANIZER_TO_SEATS_NEEDED = 1;
-    private final Priority priority;
+
+    @AttributeOverride(name = "email", column = @Column(name = "ORGANIZER"))
+    @Embedded
     private final User organizer;
-    private final List<User> attendees;
+
+    @AttributeOverride(name = "number", column = @Column(name = "REQUEST_IDENTIFER"))
+    @EmbeddedId
     private final RequestIdentifier identifier;
 
+    @ElementCollection()
+    private List<User> attendees = new ArrayList<>();
+
+    @Embedded
     private RoomNumber assignedRoomNumber;
+
+    @Enumerated
+    private Priority priority = Priority.NORMAL;
     private Instant timeOfAssignation;
     private Status status;
 
@@ -30,6 +47,11 @@ public class RoomRequest {
         this.attendees = new LinkedList<>(attendees);
         this.identifier = identifier;
         this.status = Status.WAITING;
+    }
+
+    protected RoomRequest() {
+        identifier = null;
+        organizer = null;
     }
 
     public RoomNumber getRoomNumber() {
@@ -100,6 +122,10 @@ public class RoomRequest {
         assignedRoomNumber = null;
     }
 
+    public boolean hasSameOrganizer(String email) {
+        return organizer.equals(email);
+    }
+
     private void notifyOrganizer(NotificationSenderStrategy notificationSender, Notification notification) {
         notificationSender.addRecipient(organizer);
         notificationSender.send(notification);
@@ -121,6 +147,4 @@ public class RoomRequest {
         }
         return notification;
     }
-
-
 }

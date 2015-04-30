@@ -1,8 +1,9 @@
 package ca.ulaval.ift6002.sputnik.domain.room;
 
 import org.junit.Test;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+
+import static junit.framework.Assert.assertFalse;
+import static junit.framework.TestCase.assertTrue;
 
 public class RoomNumberTest {
 
@@ -13,7 +14,7 @@ public class RoomNumberTest {
     }
 
     @Test
-    public void whenComparingTwoDifferentInstanceOfRoomNumberWithEqualNumberShouldReturnTrue() {
+    public void whenComparingTwoDifferentInstanceOfRoomNumberWithSameNumberShouldReturnTrue() {
         RoomNumber roomNumber = new RoomNumber("12345");
         RoomNumber anotherRoomNumber = new RoomNumber("12345");
 

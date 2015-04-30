@@ -24,7 +24,7 @@ public class Mailbox implements Observable {
     }
 
     public void add(RoomRequest roomRequest) {
-        roomRequests.add(roomRequest);
+        roomRequests.offer(roomRequest);
         notifyObservers();
     }
 

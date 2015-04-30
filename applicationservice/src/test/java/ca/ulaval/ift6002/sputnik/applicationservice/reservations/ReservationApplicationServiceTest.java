@@ -1,7 +1,5 @@
 package ca.ulaval.ift6002.sputnik.applicationservice.reservations;
 
-import ca.ulaval.ift6002.sputnik.applicationservice.shared.locator.ServiceLocator;
-import ca.ulaval.ift6002.sputnik.applicationservice.shared.locator.UnregisteredServiceException;
 import ca.ulaval.ift6002.sputnik.domain.mailbox.Mailbox;
 import ca.ulaval.ift6002.sputnik.domain.notification.NotificationFactory;
 import ca.ulaval.ift6002.sputnik.domain.notification.NotificationSenderStrategy;
@@ -12,6 +10,7 @@ import ca.ulaval.ift6002.sputnik.domain.request.RoomRequestRepository;
 import ca.ulaval.ift6002.sputnik.domain.room.Room;
 import ca.ulaval.ift6002.sputnik.domain.room.RoomNumber;
 import ca.ulaval.ift6002.sputnik.domain.room.RoomRepository;
+import ca.ulaval.ift6002.sputnik.domain.user.User;
 import ca.ulaval.ift6002.sputnik.strategy.assignation.FindFirstRoomStrategy;
 import ca.ulaval.ift6002.sputnik.strategy.assignation.FindRoomStrategy;
 import ca.ulaval.ift6002.sputnik.strategy.sorting.DefaultStrategy;
@@ -38,6 +37,9 @@ public class ReservationApplicationServiceTest {
 
     private static final int THREE = 3;
     private static final int TWO = 2;
+
+    private static final String EMAIL = "SOMEONE@SPUTNIK.COM";
+    private static final User USER = new User(EMAIL);
 
     private static final RequestIdentifier VALID_REQUEST_IDENTIFIER = RequestIdentifier.create();
     private static final RequestIdentifier INVALID_REQUEST_IDENTIFIER = RequestIdentifier.create();
@@ -99,22 +101,6 @@ public class ReservationApplicationServiceTest {
 
         when(roomRequestWithRoomAssigned.getRoomNumber()).thenReturn(VALID_ROOM_NUMBER);
         when(roomRequestWithRoomAssigned.hasRoomAssign()).thenReturn(true);
-    }
-
-    @Test
-    public void whenInstantiatingServiceWithServiceLocatorShouldNotThrow() {
-        ServiceLocator.getInstance().register(FindRoomStrategy.class, new FindFirstRoomStrategy());
-        ServiceLocator.getInstance().register(Mailbox.class, new Mailbox(new DefaultStrategy()));
-        ServiceLocator.getInstance().register(RoomRepository.class, roomRepository);
-        ServiceLocator.getInstance().register(RoomRequestRepository.class, roomRequestRepository);
-        ServiceLocator.getInstance().register(NotificationSenderStrategy.class, notificationSender);
-        ServiceLocator.getInstance().register(NotificationFactory.class, new NotificationFactory());
-        ServiceLocator.getInstance().register(ReservationApplicationService.class, new ReservationApplicationService());
-    }
-
-    @Test(expected = UnregisteredServiceException.class)
-    public void whenInstantiatingServiceWithServiceLocatorShouldThrow() {
-        ServiceLocator.getInstance().register(ReservationApplicationService.class, new ReservationApplicationService());
     }
 
     @Test

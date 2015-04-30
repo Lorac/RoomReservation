@@ -2,11 +2,20 @@ package ca.ulaval.ift6002.sputnik.domain.request;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 
+import javax.persistence.Column;
+import javax.persistence.Embeddable;
+import java.io.Serializable;
 import java.util.UUID;
 
-public class RequestIdentifier {
+@Embeddable
+public class RequestIdentifier implements Serializable {
 
+    private static final long serialVersionUID = 1L;
+    @Column
     private UUID number;
+
+    protected RequestIdentifier() {
+    }
 
     public RequestIdentifier(UUID number) {
         this.number = number;
@@ -14,6 +23,10 @@ public class RequestIdentifier {
 
     public static RequestIdentifier create() {
         return new RequestIdentifier(UUID.randomUUID());
+    }
+
+    public String describe() {
+        return number.toString();
     }
 
     public boolean isSame(RequestIdentifier identifier) {

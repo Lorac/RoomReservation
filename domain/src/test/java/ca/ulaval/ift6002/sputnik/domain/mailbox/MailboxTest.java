@@ -9,9 +9,14 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
+import static junit.framework.TestCase.assertEquals;
+import static junit.framework.TestCase.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.BDDMockito.willReturn;
+
 import java.util.NoSuchElementException;
 
-import static junit.framework.TestCase.*;
+
 import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -20,6 +25,7 @@ public class MailboxTest {
     private static final int THREE_ROOM_REQUESTS = 3;
     private static final RequestIdentifier ROOM_REQUEST_IDENTIFIER = RequestIdentifier.create();
     private static final RequestIdentifier INVALID_ROOM_REQUEST_IDENTIFIER = RequestIdentifier.create();
+
     private Mailbox mailbox;
 
     @Mock
@@ -73,6 +79,13 @@ public class MailboxTest {
         RoomRequest roomRequestFound = mailbox.getRoomRequestByIdentifier(ROOM_REQUEST_IDENTIFIER);
 
         assertEquals(roomRequest, roomRequestFound);
+    }
+
+    private RoomRequest givenARoom() {
+        RoomRequest roomRequest = mock(RoomRequest.class);
+        willReturn(true).given(roomRequest).hasIdentifier(ROOM_REQUEST_IDENTIFIER);
+        mailbox.add(roomRequest);
+        return roomRequest;
     }
 
     @Test(expected = NoSuchElementException.class)

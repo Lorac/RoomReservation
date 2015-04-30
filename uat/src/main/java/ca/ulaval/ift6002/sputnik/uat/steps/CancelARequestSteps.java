@@ -22,8 +22,7 @@ public class CancelARequestSteps extends StatefulStep<CancelARequestStepsState> 
 
     private static final RoomNumber ROOM_NUMBER = new RoomNumber("RN1");
     private static final int CAPACITY = 10;
-    private static final String EMAIL_ORGANIZER = "organizer@sputnik.com";
-    private static final User USER = new User(EMAIL_ORGANIZER);
+    private final String emailOrganizer = "organizer@sputnik.com";
 
     protected CancelARequestStepsState getInitialState() {
         return new CancelARequestStepsState();
@@ -31,7 +30,7 @@ public class CancelARequestSteps extends StatefulStep<CancelARequestStepsState> 
 
     @Given("a room request without a room assigned")
     public void givenARoomRequestWithoutARoomAssigned() {
-        state().roomRequest = new RoomRequest(RequestIdentifier.create(), Priority.NORMAL, USER, new LinkedList<>());
+        state().roomRequest = new RoomRequest(RequestIdentifier.create(), Priority.NORMAL, new User(emailOrganizer), new LinkedList<>());
 
         ReservationApplicationService reservationApplicationService = getReservationApplicationService();
         reservationApplicationService.addRequest(state().roomRequest);
@@ -39,7 +38,7 @@ public class CancelARequestSteps extends StatefulStep<CancelARequestStepsState> 
 
     @Given("a room request with a room assigned")
     public void givenARoomRequestWithARoomAssigned() {
-        state().roomRequest = new RoomRequest(RequestIdentifier.create(), Priority.NORMAL, USER, new LinkedList<>());
+        state().roomRequest = new RoomRequest(RequestIdentifier.create(), Priority.NORMAL, new User(emailOrganizer), new LinkedList<>());
         Room room = persistARoom();
         state().roomRequest.assignRoom(room);
 
@@ -88,7 +87,7 @@ public class CancelARequestSteps extends StatefulStep<CancelARequestStepsState> 
     }
 
     private void createReservation() {
-        state().roomRequest = new ca.ulaval.ift6002.sputnik.domain.request.RoomRequest(RequestIdentifier.create(), Priority.NORMAL, new User(EMAIL_ORGANIZER), new LinkedList<>());
+        state().roomRequest = new ca.ulaval.ift6002.sputnik.domain.request.RoomRequest(RequestIdentifier.create(), Priority.NORMAL, new User(emailOrganizer), new LinkedList<>());
         RoomRequestRepository roomRequestRepository = getReservationRepository();
         roomRequestRepository.persist(state().roomRequest);
     }

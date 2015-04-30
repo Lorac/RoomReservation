@@ -99,6 +99,17 @@ public class ReservationApplicationService {
         roomRepository.persist(room);
     }
 
+    public RoomRequest getRequest(String email, RequestIdentifier roomRequestIdentifier) {
+        RoomRequest roomRequest = roomRequestRepository.findReservationByIdentifier(roomRequestIdentifier);
+        if(roomRequest.hasSameOrganizer(email)) {
+            return roomRequest;
+        } else {
+            throw new NotSameEmailException();
+        }
+
+
+    }
+
     private void releaseRoom(Room room) {
         room.release();
         roomRepository.persist(room);

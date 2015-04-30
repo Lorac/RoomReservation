@@ -1,18 +1,36 @@
 package ca.ulaval.ift6002.sputnik.domain.room;
 
+import javax.persistence.EmbeddedId;
+import javax.persistence.Entity;
+
+@Entity
 public class Room {
 
-    private boolean reserve;
-    private RoomNumber number;
-    private int capacity;
+    @EmbeddedId
+    protected RoomNumber number;
+
+    protected boolean reserve;
+
+    protected int capacity;
 
     public Room(RoomNumber roomNumber, int capacity) {
         number = roomNumber;
         this.capacity = capacity;
     }
 
+    protected Room() {
+    }
+
     public int getCapacity() {
         return capacity;
+    }
+
+    public boolean hasNumber(RoomNumber roomNumber) {
+        return compareRoomNumber(roomNumber);
+    }
+
+    public boolean hasSameNumber(Room room) {
+        return compareRoomNumber(room.number);
     }
 
     public RoomNumber getRoomNumber() {
@@ -33,5 +51,9 @@ public class Room {
 
     public boolean isReserved() {
         return reserve;
+    }
+
+    private boolean compareRoomNumber(RoomNumber roomNumber) {
+        return number.isSame(roomNumber);
     }
 }

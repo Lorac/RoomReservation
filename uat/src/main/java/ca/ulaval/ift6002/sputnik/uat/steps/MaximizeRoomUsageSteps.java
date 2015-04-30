@@ -38,7 +38,7 @@ public class MaximizeRoomUsageSteps extends StatefulStep<MaximizeRoomUsageStepsS
 
     @Given("a room request with attendees")
     public void givenARoomRequestWithAttendees() {
-        state().roomRequest = new RoomRequest(RequestIdentifier.create(), Priority.NORMAL, new User(EMAIL_ORGANIZER), getAttendees(NUMBER_OF_ATTENDEES));
+        state().roomRequest = new ca.ulaval.ift6002.sputnik.domain.request.RoomRequest(RequestIdentifier.create(), Priority.NORMAL, new User(EMAIL_ORGANIZER), getAttendees(NUMBER_OF_ATTENDEES));
         switchToMaximumRoomUsageStrategy();
         ReservationApplicationService reservationApplicationService = getReservationApplicationService();
         reservationApplicationService.addRequest(state().roomRequest);

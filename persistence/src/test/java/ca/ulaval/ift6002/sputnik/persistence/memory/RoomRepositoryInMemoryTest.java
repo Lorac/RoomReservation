@@ -40,6 +40,10 @@ public class RoomRepositoryInMemoryTest {
     @Before
     public void setUp() {
         roomRepository = new RoomRepositoryInMemory();
+        willReturn(true).given(room).hasSameNumber(room);
+        willReturn(false).given(room).hasSameNumber(anotherRoom);
+        willReturn(true).given(room).hasNumber(roomNumberForRoom);
+        willReturn(true).given(anotherRoom).hasNumber(roomNumberForAnotherRoom);
         willReturn(roomNumberForRoom).given(room).getRoomNumber();
         willReturn(roomNumberForAnotherRoom).given(anotherRoom).getRoomNumber();
     }
