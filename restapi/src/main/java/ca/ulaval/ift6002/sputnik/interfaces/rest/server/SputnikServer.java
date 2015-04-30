@@ -29,12 +29,13 @@ public class SputnikServer {
         for (Class<? extends Filter> filter : filters) {
             servletContextHandler.addFilter(filter, "/*", EnumSet.of(DispatcherType.REQUEST));
         }
-        configurerJersey(servletContextHandler);
+        configureJersey(servletContextHandler);
         server.start();
     }
 
-    private void configurerJersey(ServletContextHandler servletContextHandler) {
-        ServletContainer container = new ServletContainer(new ResourceConfig().packages(RESOURCES_PACKAGE).register(JacksonFeature.class));
+    private void configureJersey(ServletContextHandler servletContextHandler) {
+        ServletContainer container = new ServletContainer(new ResourceConfig().packages(RESOURCES_PACKAGE).
+                register(JacksonFeature.class));
         ServletHolder jerseyServletHolder = new ServletHolder(container);
         servletContextHandler.addServlet(jerseyServletHolder, "/*");
     }

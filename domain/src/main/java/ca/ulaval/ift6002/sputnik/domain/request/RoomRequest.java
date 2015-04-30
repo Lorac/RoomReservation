@@ -7,8 +7,12 @@ import ca.ulaval.ift6002.sputnik.domain.notification.NotificationSenderStrategy;
 import ca.ulaval.ift6002.sputnik.domain.room.Room;
 import ca.ulaval.ift6002.sputnik.domain.room.RoomNumber;
 import ca.ulaval.ift6002.sputnik.domain.user.User;
+import org.codehaus.jackson.map.annotate.JsonSerialize;
 
 import javax.persistence.*;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlTransient;
 import java.io.Serializable;
 import java.time.Instant;
@@ -17,28 +21,38 @@ import java.util.LinkedList;
 import java.util.List;
 
 @Entity(name = "DEMANDE")
+@XmlAccessorType(XmlAccessType.FIELD)
+@JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
 public class RoomRequest implements Serializable {
 
-    @XmlTransient
     private final static int ADD_ORGANIZER_TO_SEATS_NEEDED = 1;
 
     @AttributeOverride(name = "email", column = @Column(name = "ORGANIZER"))
     @Embedded
+    @XmlElement(name = "courrielOrganisateur")
     private final User organizer;
 
     @AttributeOverride(name = "number", column = @Column(name = "REQUEST_IDENTIFER"))
     @EmbeddedId
+    @XmlTransient
     private final RequestIdentifier identifier;
 
     @ElementCollection()
+    @XmlTransient
     private List<User> attendees = new ArrayList<>();
 
     @Embedded
+    @XmlElement(nillable = true, name = "salleAssigne")
     private RoomNumber assignedRoomNumber;
 
-    @Enumerated
+    @Enumerated(EnumType.STRING)
+    @XmlElement(name = "priorite")
     private Priority priority = Priority.NORMAL;
+
+    @XmlTransient
     private Instant timeOfAssignation;
+
+    @XmlElement(name = "statutDemande")
     private Status status;
 
     public RoomRequest(RequestIdentifier identifier, Priority priority, User organizer, List<User> attendees) {
@@ -123,7 +137,7 @@ public class RoomRequest implements Serializable {
     }
 
     public boolean hasSameOrganizer(String email) {
-        return organizer.equals(email);
+        return organizer.getEmail().equals(email);
     }
 
     private void notifyOrganizer(NotificationSenderStrategy notificationSender, Notification notification) {

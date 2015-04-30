@@ -3,7 +3,7 @@ package ca.ulaval.ift6002.sputnik.persistence.hibernate;
 import ca.ulaval.ift6002.sputnik.domain.request.RequestIdentifier;
 import ca.ulaval.ift6002.sputnik.domain.request.RoomRequest;
 import ca.ulaval.ift6002.sputnik.domain.request.RoomRequestRepository;
-import ca.ulaval.ift6002.sputnik.domain.room.RoomNotFoundException;
+import ca.ulaval.ift6002.sputnik.domain.room.RoomRequestNotFoundException;
 
 import javax.persistence.EntityManager;
 import javax.persistence.criteria.CriteriaBuilder;
@@ -25,7 +25,7 @@ public class HibernateRoomRequestRepository extends HibernateRepository implemen
     public RoomRequest findReservationByIdentifier(RequestIdentifier identifier) {
         RoomRequest room = entityManager.find(RoomRequest.class, identifier);
         if (room == null) {
-            throw new RoomNotFoundException(String.format("Couldn't find the room with number '%s'.", identifier));
+            throw new RoomRequestNotFoundException(String.format("Couldn't find the room request with number '%s'.", identifier.describe()));
         }
         return room;
     }

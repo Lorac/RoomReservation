@@ -4,6 +4,7 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
+import javax.xml.bind.annotation.XmlElement;
 import java.io.Serializable;
 
 @Embeddable
@@ -12,6 +13,7 @@ public class RoomNumber implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Column(name = "ROOM_NUMBER", nullable = false)
+    @XmlElement
     private String number;
 
     public RoomNumber(String number) {

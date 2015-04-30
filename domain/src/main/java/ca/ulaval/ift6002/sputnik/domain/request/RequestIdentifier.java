@@ -11,6 +11,7 @@ import java.util.UUID;
 public class RequestIdentifier implements Serializable {
 
     private static final long serialVersionUID = 1L;
+
     @Column
     private UUID number;
 

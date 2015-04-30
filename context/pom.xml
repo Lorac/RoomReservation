@@ -10,6 +10,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>context</artifactId>
+
     <dependencies>
         <dependency>
             <groupId>org.hibernate.javax.persistence</groupId>
@@ -39,5 +40,4 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
-
 </project>

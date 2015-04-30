@@ -41,7 +41,6 @@ public class RoomRequestProcessor implements MailboxObserver {
         if (future != null) {
             future.cancel(false);
         }
-
         startAssignationOnce();
 
         startAssignationAtFixedRate(period);

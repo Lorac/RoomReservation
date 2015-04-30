@@ -28,9 +28,9 @@ public class RoomRequestResourceTest {
 
     @Test
     public void tryingToFindARoomRequestShouldForwardToTheService() {
-        resource.getRoomRequest(EMAIL, VALID_ROOM_REQUEST_IDENTIFIER.describe());
+        resource.getRequest(EMAIL, VALID_ROOM_REQUEST_IDENTIFIER.describe());
 
-        verify(service).getRequest(EMAIL, VALID_ROOM_REQUEST_IDENTIFIER);
+        verify(service).getRoomRequest(EMAIL, VALID_ROOM_REQUEST_IDENTIFIER);
     }
 
 }
