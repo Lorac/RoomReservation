@@ -34,6 +34,16 @@ public class RequestIdentifier implements Serializable {
     }
 
     @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        RequestIdentifier that = (RequestIdentifier) o;
+
+        return isSame(that);
+    }
+
+    @Override
     public int hashCode() {
         return number.hashCode();
     }

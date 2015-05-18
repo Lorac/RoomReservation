@@ -22,7 +22,7 @@ import com.dumbster.smtp.SimpleSmtpServer;
 
 import java.util.Properties;
 
-public class DemoContext extends ContextBase {
+public class HibernateDemoContext extends ContextBase {
 
     private static final int SMTP_PORT = 8080;
 

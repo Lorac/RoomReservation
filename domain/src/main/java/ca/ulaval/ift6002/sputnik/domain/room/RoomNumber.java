@@ -11,7 +11,7 @@ public class RoomNumber implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @Column(name = "ROOM_NUMBER", nullable = false)
+    @Column(name = "ROOM_NUMBER", nullable = true)
     private String number;
 
     public RoomNumber(String number) {

@@ -27,7 +27,6 @@ public class RoomRequestResource {
     }
 
     @GET
-    @Produces(MediaType.APPLICATION_JSON)
     public RoomRequest getRoomRequest(
             @PathParam("email") String email,
             @PathParam("requestIdentifier") String requestIdentifierString) {
