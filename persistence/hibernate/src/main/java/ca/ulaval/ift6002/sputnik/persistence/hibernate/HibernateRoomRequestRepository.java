@@ -3,7 +3,6 @@ package ca.ulaval.ift6002.sputnik.persistence.hibernate;
 import ca.ulaval.ift6002.sputnik.domain.request.RequestIdentifier;
 import ca.ulaval.ift6002.sputnik.domain.request.RoomRequest;
 import ca.ulaval.ift6002.sputnik.domain.request.RoomRequestRepository;
-import ca.ulaval.ift6002.sputnik.domain.room.RoomRequestNotFoundException;
 
 import javax.persistence.EntityManager;
 import javax.persistence.criteria.CriteriaBuilder;

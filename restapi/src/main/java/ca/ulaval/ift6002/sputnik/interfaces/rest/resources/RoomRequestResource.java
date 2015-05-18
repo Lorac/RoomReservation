@@ -5,7 +5,7 @@ import ca.ulaval.ift6002.sputnik.applicationservice.reservations.ReservationAppl
 import ca.ulaval.ift6002.sputnik.applicationservice.reservations.RoomRequestForm;
 import ca.ulaval.ift6002.sputnik.domain.request.RequestIdentifier;
 import ca.ulaval.ift6002.sputnik.domain.request.RoomRequest;
-import ca.ulaval.ift6002.sputnik.domain.room.RoomRequestNotFoundException;
+import ca.ulaval.ift6002.sputnik.persistence.hibernate.RoomRequestNotFoundException;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;

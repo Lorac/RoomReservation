@@ -31,7 +31,7 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 
-public class DemoContext extends ContextBase {
+public class HibernateDemoContext extends ContextBase {
 
     private static final int EMAIL_THRESHOLD = 50;
     private static final int SMTP_PORT = 8080;
