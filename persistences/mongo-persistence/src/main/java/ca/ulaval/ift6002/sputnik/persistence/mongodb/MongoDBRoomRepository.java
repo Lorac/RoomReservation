@@ -2,6 +2,7 @@ package ca.ulaval.ift6002.sputnik.persistence.mongodb;
 
 
 import ca.ulaval.ift6002.sputnik.domain.core.mongo.room.MongoRoom;
+import ca.ulaval.ift6002.sputnik.domain.core.room.RoomNotFoundException;
 import ca.ulaval.ift6002.sputnik.domain.core.room.RoomNumber;
 import ca.ulaval.ift6002.sputnik.domain.core.room.RoomRepository;
 import com.mongodb.MongoClient;
@@ -19,7 +20,11 @@ public class MongoDBRoomRepository extends BasicDAO<MongoRoom, RoomNumber> imple
 
     @Override
     public MongoRoom findRoomByNumber(RoomNumber roomNumber) {
-        return findOne("roomNumber", roomNumber);
+        MongoRoom room = findOne("roomNumber", roomNumber);
+        if (room == null) {
+            throw new RoomNotFoundException(String.format("Couldn't find the room with number '%s'.", roomNumber));
+        }
+        return room;
     }
 
     @Override

@@ -2,6 +2,7 @@ package ca.ulaval.ift6002.sputnik.persistence.mongodb;
 
 import ca.ulaval.ift6002.sputnik.domain.core.mongo.room.MongoRoom;
 import ca.ulaval.ift6002.sputnik.domain.core.room.Room;
+import ca.ulaval.ift6002.sputnik.domain.core.room.RoomNotFoundException;
 import ca.ulaval.ift6002.sputnik.domain.core.room.RoomNumber;
 import ca.ulaval.ift6002.sputnik.domain.core.room.RoomRepository;
 import com.mongodb.MongoClient;
@@ -24,6 +25,7 @@ import static org.junit.Assert.assertTrue;
 public class MongoDBRoomRepositoryITest {
 
     private static final RoomNumber ROOM_NUMBER = new RoomNumber("PLT-1234");
+    private static final RoomNumber BAD_ROOM_NUMBER = new RoomNumber("BAD_ROOM_NUMBER");
     private static final int ROOM_CAPACITY = 4;
     private final String DATABASE_NAME = "MongoDBRoomRepositoryITest";
     private MongoClient mongoClient = null;
@@ -64,5 +66,10 @@ public class MongoDBRoomRepositoryITest {
         List<MongoRoom> all = roomRepository.findAll();
 
         assertTrue("Should not contain a room", all.isEmpty());
+    }
+
+    @Test(expected = RoomNotFoundException.class)
+    public void whenTryingToFindARoomWithWrongNumberItShouldThrow() {
+        roomRepository.findRoomByNumber(BAD_ROOM_NUMBER);
     }
 }

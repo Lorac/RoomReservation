@@ -15,7 +15,7 @@ import ca.ulaval.ift6002.sputnik.domain.core.room.RoomRepository;
 import ca.ulaval.ift6002.sputnik.domain.core.room.StandardRoom;
 import ca.ulaval.ift6002.sputnik.emailsender.JavaxMailSender;
 import ca.ulaval.ift6002.sputnik.emailsender.notification.JavaxMailSenderStrategy;
-import ca.ulaval.ift6002.sputnik.persistence.memory.RoomRepositoryInMemory;
+import ca.ulaval.ift6002.sputnik.persistence.memory.InMemoryRoomRepository;
 import ca.ulaval.ift6002.sputnik.persistence.memory.RoomRequestRepositoryInMemory;
 import ca.ulaval.ift6002.sputnik.strategy.assignation.FindFirstRoomStrategy;
 import ca.ulaval.ift6002.sputnik.strategy.assignation.FindRoomStrategy;
@@ -32,7 +32,7 @@ public class InMemoryDemoContext extends ContextBase {
         EntityManagerProvider.setEntityManager(EntityManagerFactoryProvider.getFactory().createEntityManager());
         ServiceLocator.getInstance().register(FindRoomStrategy.class, new FindFirstRoomStrategy());
         ServiceLocator.getInstance().register(Mailbox.class, new Mailbox(new DefaultStrategy()));
-        ServiceLocator.getInstance().register(RoomRepository.class, new RoomRepositoryInMemory());
+        ServiceLocator.getInstance().register(RoomRepository.class, new InMemoryRoomRepository());
         ServiceLocator.getInstance().register(RoomRequestRepository.class, new RoomRequestRepositoryInMemory());
         ServiceLocator.getInstance().register(SimpleSmtpServer.class, SimpleSmtpServer.start(SMTP_PORT));
         ServiceLocator.getInstance().register(NotificationSenderStrategy.class, new JavaxMailSenderStrategy(new JavaxMailSender(getMailProperties(SMTP_PORT))));

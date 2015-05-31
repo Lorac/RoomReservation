@@ -1,6 +1,7 @@
 package ca.ulaval.ift6002.sputnik.persistence.memory;
 
 import ca.ulaval.ift6002.sputnik.domain.core.room.Room;
+import ca.ulaval.ift6002.sputnik.domain.core.room.RoomNotFoundException;
 import ca.ulaval.ift6002.sputnik.domain.core.room.RoomNumber;
 import ca.ulaval.ift6002.sputnik.domain.core.room.RoomRepository;
 
@@ -9,17 +10,21 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class RoomRepositoryInMemory implements RoomRepository<Room> {
+public class InMemoryRoomRepository implements RoomRepository<Room> {
 
     private Map<RoomNumber, Room> rooms;
 
-    public RoomRepositoryInMemory() {
+    public InMemoryRoomRepository() {
         rooms = new HashMap<>();
     }
 
     @Override
     public Room findRoomByNumber(RoomNumber roomNumber) {
-        return rooms.get(roomNumber);
+        Room room = rooms.get(roomNumber);
+        if (room == null) {
+            throw new RoomNotFoundException(String.format("Couldn't find the room with number '%s'.", roomNumber));
+        }
+        return room;
     }
 
     @Override

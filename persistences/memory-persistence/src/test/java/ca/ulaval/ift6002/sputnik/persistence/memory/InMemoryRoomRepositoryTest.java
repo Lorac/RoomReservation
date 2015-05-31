@@ -1,6 +1,7 @@
 package ca.ulaval.ift6002.sputnik.persistence.memory;
 
 import ca.ulaval.ift6002.sputnik.domain.core.room.Room;
+import ca.ulaval.ift6002.sputnik.domain.core.room.RoomNotFoundException;
 import ca.ulaval.ift6002.sputnik.domain.core.room.RoomNumber;
 import ca.ulaval.ift6002.sputnik.domain.core.room.RoomRepository;
 import org.junit.Before;
@@ -12,12 +13,11 @@ import org.mockito.runners.MockitoJUnitRunner;
 import java.util.List;
 
 import static junit.framework.TestCase.assertNotNull;
-import static junit.framework.TestCase.assertNull;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.BDDMockito.willReturn;
 
 @RunWith(MockitoJUnitRunner.class)
-public class RoomRepositoryInMemoryTest {
+public class InMemoryRoomRepositoryTest {
 
     private static final int THREE_ROOMS = 3;
     private RoomRepository roomRepository;
@@ -39,7 +39,7 @@ public class RoomRepositoryInMemoryTest {
 
     @Before
     public void setUp() {
-        roomRepository = new RoomRepositoryInMemory();
+        roomRepository = new InMemoryRoomRepository();
         willReturn(true).given(room).hasSameNumber(room);
         willReturn(false).given(room).hasSameNumber(anotherRoom);
         willReturn(true).given(room).hasNumber(roomNumberForRoom);
@@ -66,11 +66,9 @@ public class RoomRepositoryInMemoryTest {
         assertEquals(THREE_ROOMS, rooms.size());
     }
 
-    @Test
-    public void whenFindARoomByNumberWithWrongNumberShouldReturnEmptyOptional() {
-        Room result = (Room) roomRepository.findRoomByNumber(roomNumberForAnotherRoom);
-
-        assertNull(result);
+    @Test(expected = RoomNotFoundException.class)
+    public void whenFindARoomByNumberWithWrongNumberShouldThrow() {
+        roomRepository.findRoomByNumber(roomNumberForAnotherRoom);
     }
 
     private void givenThreeRooms() {
