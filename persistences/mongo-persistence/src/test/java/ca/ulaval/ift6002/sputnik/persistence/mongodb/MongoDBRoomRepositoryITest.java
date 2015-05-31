@@ -16,6 +16,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 import org.mongodb.morphia.Morphia;
 
 import java.net.InetSocketAddress;
+import java.util.List;
 
 import static org.junit.Assert.assertTrue;
 
@@ -56,5 +57,12 @@ public class MongoDBRoomRepositoryITest {
         Room roomFound = (Room) roomRepository.findRoomByNumber(ROOM_NUMBER);
 
         assertTrue("Should contain the room", roomFound.hasSameNumber(room));
+    }
+
+    @Test
+    public void whenFindAllWithNoRoomShouldReturnNothing() {
+        List<MongoRoom> all = roomRepository.findAll();
+
+        assertTrue("Should not contain a room", all.isEmpty());
     }
 }
