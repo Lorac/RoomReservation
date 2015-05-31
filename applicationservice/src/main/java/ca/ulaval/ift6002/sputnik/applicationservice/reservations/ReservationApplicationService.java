@@ -106,8 +106,6 @@ public class ReservationApplicationService {
         } else {
             throw new NotSameEmailException();
         }
-
-
     }
 
     private void releaseRoom(Room room) {
