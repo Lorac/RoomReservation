@@ -2,18 +2,19 @@ package ca.ulaval.ift6002.sputnik.uat.steps;
 
 import ca.ulaval.ift6002.sputnik.applicationservice.reservations.ReservationApplicationService;
 import ca.ulaval.ift6002.sputnik.applicationservice.shared.locator.ServiceLocator;
-import ca.ulaval.ift6002.sputnik.domain.notification.CanceledNotification;
-import ca.ulaval.ift6002.sputnik.domain.notification.InsufficientRoomNotification;
-import ca.ulaval.ift6002.sputnik.domain.notification.Notification;
-import ca.ulaval.ift6002.sputnik.domain.notification.SuccessNotification;
-import ca.ulaval.ift6002.sputnik.domain.request.Priority;
-import ca.ulaval.ift6002.sputnik.domain.request.RequestIdentifier;
-import ca.ulaval.ift6002.sputnik.domain.request.RoomRequest;
-import ca.ulaval.ift6002.sputnik.domain.request.RoomRequestRepository;
-import ca.ulaval.ift6002.sputnik.domain.room.Room;
-import ca.ulaval.ift6002.sputnik.domain.room.RoomNumber;
-import ca.ulaval.ift6002.sputnik.domain.room.RoomRepository;
-import ca.ulaval.ift6002.sputnik.domain.user.User;
+import ca.ulaval.ift6002.sputnik.domain.core.notification.CanceledNotification;
+import ca.ulaval.ift6002.sputnik.domain.core.notification.InsufficientRoomNotification;
+import ca.ulaval.ift6002.sputnik.domain.core.notification.Notification;
+import ca.ulaval.ift6002.sputnik.domain.core.notification.SuccessNotification;
+import ca.ulaval.ift6002.sputnik.domain.core.request.Priority;
+import ca.ulaval.ift6002.sputnik.domain.core.request.RequestIdentifier;
+import ca.ulaval.ift6002.sputnik.domain.core.request.RoomRequest;
+import ca.ulaval.ift6002.sputnik.domain.core.request.RoomRequestRepository;
+import ca.ulaval.ift6002.sputnik.domain.core.room.Room;
+import ca.ulaval.ift6002.sputnik.domain.core.room.RoomNumber;
+import ca.ulaval.ift6002.sputnik.domain.core.room.RoomRepository;
+import ca.ulaval.ift6002.sputnik.domain.core.room.StandardRoom;
+import ca.ulaval.ift6002.sputnik.domain.core.user.User;
 import ca.ulaval.ift6002.sputnik.uat.steps.NotifyByEmailSteps.NotifyByEmailAfterProcessingStepsState;
 import ca.ulaval.ift6002.sputnik.uat.steps.state.StatefulStep;
 import ca.ulaval.ift6002.sputnik.uat.steps.state.StepState;
@@ -34,9 +35,9 @@ public class NotifyByEmailSteps extends StatefulStep<NotifyByEmailAfterProcessin
     private static final RoomNumber ROOM_NUMBER = new RoomNumber("SPUT-1");
     private final int NUMBER_OF_EMAIL_FOR_ORGANIZER_AND_RESERVATION_CLERK = 1;
     private final int NUMBER_OF_EMAIL_FOR_ATTENDEES = 1;
-    private final String emailAttendees = "attendees%s@sputnik.com";
-    private final String emailOrganizer = "organizer@sputnik.com";
-    private final Room ASSIGNED_ROOM = new Room(ROOM_NUMBER, 10);
+    private final String emailAttendees = "attendees%s@ca.ulaval.ift6002.sputnik.com";
+    private final String emailOrganizer = "organizer@ca.ulaval.ift6002.sputnik.com";
+    private final Room ASSIGNED_ROOM = new StandardRoom(ROOM_NUMBER, 10);
 
     protected NotifyByEmailAfterProcessingStepsState getInitialState() {
         return new NotifyByEmailAfterProcessingStepsState();
@@ -65,7 +66,7 @@ public class NotifyByEmailSteps extends StatefulStep<NotifyByEmailAfterProcessin
     public void givenUnreservedRooms(int roomCount) {
         RoomRepository repository = getRoomRepository();
         for (int i = 0; i < roomCount; i++) {
-            Room room = new Room(new RoomNumber(String.format("SPUT-%s", i)), 10);
+            Room room = new StandardRoom(new RoomNumber(String.format("SPUT-%s", i)), 10);
             repository.persist(room);
         }
     }

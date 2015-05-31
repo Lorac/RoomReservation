@@ -1,8 +1,8 @@
 package ca.ulaval.ift6002.sputnik.interfaces.rest.resources;
 
 import ca.ulaval.ift6002.sputnik.applicationservice.reservations.ReservationApplicationService;
-import ca.ulaval.ift6002.sputnik.domain.mailbox.Mailbox;
-import ca.ulaval.ift6002.sputnik.domain.request.RequestIdentifier;
+import ca.ulaval.ift6002.sputnik.domain.core.mailbox.Mailbox;
+import ca.ulaval.ift6002.sputnik.domain.core.request.RequestIdentifier;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;

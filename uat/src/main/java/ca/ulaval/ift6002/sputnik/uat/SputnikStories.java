@@ -13,7 +13,7 @@ import org.jbehave.core.reporters.StoryReporterBuilder;
 import org.jbehave.core.steps.InjectableStepsFactory;
 import org.jbehave.core.steps.ScanningStepsFactory;
 
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import static java.util.Arrays.asList;
@@ -40,7 +40,7 @@ public class SputnikStories extends JUnitStories {
     }
 
     public static void main(String[] args) {
-        new SputnikStories().embedder.runAsEmbeddables(Arrays.asList(SputnikStories.class.getCanonicalName()));
+        new SputnikStories().embedder.runAsEmbeddables(Collections.singletonList(SputnikStories.class.getCanonicalName()));
     }
 
     @Override

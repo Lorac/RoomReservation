@@ -2,11 +2,12 @@ package ca.ulaval.ift6002.sputnik.uat.steps;
 
 import ca.ulaval.ift6002.sputnik.applicationservice.reservations.ReservationApplicationService;
 import ca.ulaval.ift6002.sputnik.applicationservice.shared.locator.ServiceLocator;
-import ca.ulaval.ift6002.sputnik.domain.request.*;
-import ca.ulaval.ift6002.sputnik.domain.room.Room;
-import ca.ulaval.ift6002.sputnik.domain.room.RoomNumber;
-import ca.ulaval.ift6002.sputnik.domain.room.RoomRepository;
-import ca.ulaval.ift6002.sputnik.domain.user.User;
+import ca.ulaval.ift6002.sputnik.domain.core.request.*;
+import ca.ulaval.ift6002.sputnik.domain.core.room.Room;
+import ca.ulaval.ift6002.sputnik.domain.core.room.RoomNumber;
+import ca.ulaval.ift6002.sputnik.domain.core.room.RoomRepository;
+import ca.ulaval.ift6002.sputnik.domain.core.room.StandardRoom;
+import ca.ulaval.ift6002.sputnik.domain.core.user.User;
 import ca.ulaval.ift6002.sputnik.uat.steps.CancelARequestSteps.CancelARequestStepsState;
 import ca.ulaval.ift6002.sputnik.uat.steps.state.StatefulStep;
 import ca.ulaval.ift6002.sputnik.uat.steps.state.StepState;
@@ -22,7 +23,7 @@ public class CancelARequestSteps extends StatefulStep<CancelARequestStepsState> 
 
     private static final RoomNumber ROOM_NUMBER = new RoomNumber("RN1");
     private static final int CAPACITY = 10;
-    private final String emailOrganizer = "organizer@sputnik.com";
+    private final String emailOrganizer = "organizer@ca.ulaval.ift6002.sputnik.com";
 
     protected CancelARequestStepsState getInitialState() {
         return new CancelARequestStepsState();
@@ -47,7 +48,7 @@ public class CancelARequestSteps extends StatefulStep<CancelARequestStepsState> 
     }
 
     private Room persistARoom() {
-        Room room = new Room(ROOM_NUMBER, CAPACITY);
+        Room room = new StandardRoom(ROOM_NUMBER, CAPACITY);
         RoomRepository roomRepository = getRoomRepository();
         roomRepository.persist(room);
         return room;
@@ -83,11 +84,11 @@ public class CancelARequestSteps extends StatefulStep<CancelARequestStepsState> 
 
     private void createRoomForReservation() {
         RoomRepository repository = getRoomRepository();
-        repository.persist(new Room(ROOM_NUMBER, 10));
+        repository.persist(new StandardRoom(ROOM_NUMBER, 10));
     }
 
     private void createReservation() {
-        state().roomRequest = new ca.ulaval.ift6002.sputnik.domain.request.RoomRequest(RequestIdentifier.create(), Priority.NORMAL, new User(emailOrganizer), new LinkedList<>());
+        state().roomRequest = new RoomRequest(RequestIdentifier.create(), Priority.NORMAL, new User(emailOrganizer), new LinkedList<>());
         RoomRequestRepository roomRequestRepository = getReservationRepository();
         roomRequestRepository.persist(state().roomRequest);
     }

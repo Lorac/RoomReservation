@@ -4,13 +4,14 @@ import ca.ulaval.ift6002.sputnik.applicationservice.reservations.ReservationAppl
 import ca.ulaval.ift6002.sputnik.applicationservice.shared.locator.ServiceLocator;
 import ca.ulaval.ift6002.sputnik.applicationservice.shared.persistence.EntityManagerFactoryProvider;
 import ca.ulaval.ift6002.sputnik.applicationservice.shared.persistence.EntityManagerProvider;
-import ca.ulaval.ift6002.sputnik.domain.mailbox.Mailbox;
-import ca.ulaval.ift6002.sputnik.domain.notification.NotificationFactory;
-import ca.ulaval.ift6002.sputnik.domain.notification.NotificationSenderStrategy;
-import ca.ulaval.ift6002.sputnik.domain.request.RoomRequestRepository;
-import ca.ulaval.ift6002.sputnik.domain.room.Room;
-import ca.ulaval.ift6002.sputnik.domain.room.RoomNumber;
-import ca.ulaval.ift6002.sputnik.domain.room.RoomRepository;
+import ca.ulaval.ift6002.sputnik.domain.core.hibernate.room.HibernateRoom;
+import ca.ulaval.ift6002.sputnik.domain.core.mailbox.Mailbox;
+import ca.ulaval.ift6002.sputnik.domain.core.notification.NotificationFactory;
+import ca.ulaval.ift6002.sputnik.domain.core.notification.NotificationSenderStrategy;
+import ca.ulaval.ift6002.sputnik.domain.core.request.RoomRequestRepository;
+import ca.ulaval.ift6002.sputnik.domain.core.room.Room;
+import ca.ulaval.ift6002.sputnik.domain.core.room.RoomNumber;
+import ca.ulaval.ift6002.sputnik.domain.core.room.RoomRepository;
 import ca.ulaval.ift6002.sputnik.emailsender.JavaxMailSender;
 import ca.ulaval.ift6002.sputnik.emailsender.notification.JavaxMailSenderStrategy;
 import ca.ulaval.ift6002.sputnik.persistence.hibernate.HibernateRoomRepository;
@@ -43,9 +44,9 @@ public class HibernateDemoContext extends ContextBase {
     protected void applyFillers() {
 
         RoomRepository roomRepository = ServiceLocator.getInstance().resolve(RoomRepository.class);
-        Room room1 = new Room(new RoomNumber("PLT-3904"), 50);
-        Room room2 = new Room(new RoomNumber("PLT-2551"), 30);
-        Room room3 = new Room(new RoomNumber("VCH-2860"), 75);
+        Room room1 = new HibernateRoom(new RoomNumber("PLT-3904"), 50);
+        Room room2 = new HibernateRoom(new RoomNumber("PLT-2551"), 30);
+        Room room3 = new HibernateRoom(new RoomNumber("VCH-2860"), 75);
 
         roomRepository.persist(room1);
         roomRepository.persist(room2);

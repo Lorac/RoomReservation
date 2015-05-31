@@ -1,6 +1,6 @@
 <?xml version="1.0"  encoding="UTF-8"?>
-<persistence xmlns="http://xmlns.jcp.org/xml/ns/persistence"
-             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<persistence xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xmlns="http://xmlns.jcp.org/xml/ns/persistence"
              xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence
                                  http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd"
              version="2.1">
@@ -9,10 +9,10 @@
         <description>H2 In Memory DB</description>
         <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
 
-        <class>ca.ulaval.ift6002.sputnik.domain.room.Room</class>
-        <class>ca.ulaval.ift6002.sputnik.domain.room.RoomNumber</class>
-        <class>ca.ulaval.ift6002.sputnik.domain.request.RoomRequest</class>
-        <class>ca.ulaval.ift6002.sputnik.domain.user.User</class>
+        <class>ca.ulaval.ift6002.sputnik.domain.core.room.Room</class>
+        <class>ca.ulaval.ift6002.sputnik.domain.core.room.RoomNumber</class>
+        <class>ca.ulaval.ift6002.sputnik.domain.core.request.RoomRequest</class>
+        <class>ca.ulaval.ift6002.sputnik.domain.core.user.User</class>
         <exclude-unlisted-classes>false</exclude-unlisted-classes>
 
         <properties>

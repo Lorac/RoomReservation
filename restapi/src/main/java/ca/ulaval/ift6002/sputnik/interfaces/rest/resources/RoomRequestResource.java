@@ -2,8 +2,8 @@ package ca.ulaval.ift6002.sputnik.interfaces.rest.resources;
 
 
 import ca.ulaval.ift6002.sputnik.applicationservice.reservations.ReservationApplicationService;
-import ca.ulaval.ift6002.sputnik.domain.request.RequestIdentifier;
-import ca.ulaval.ift6002.sputnik.domain.request.RoomRequest;
+import ca.ulaval.ift6002.sputnik.domain.core.request.RequestIdentifier;
+import ca.ulaval.ift6002.sputnik.domain.core.request.RoomRequest;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;

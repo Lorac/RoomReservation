@@ -1,8 +1,8 @@
 package ca.ulaval.ift6002.sputnik.emailsender.notification;
 
-import ca.ulaval.ift6002.sputnik.domain.notification.Notification;
-import ca.ulaval.ift6002.sputnik.domain.notification.NotificationSenderStrategy;
-import ca.ulaval.ift6002.sputnik.domain.user.User;
+import ca.ulaval.ift6002.sputnik.domain.core.notification.Notification;
+import ca.ulaval.ift6002.sputnik.domain.core.notification.NotificationSenderStrategy;
+import ca.ulaval.ift6002.sputnik.domain.core.user.User;
 import ca.ulaval.ift6002.sputnik.emailsender.JavaxMailSender;
 
 import javax.mail.MessagingException;
@@ -29,7 +29,7 @@ public class JavaxMailSenderStrategy implements NotificationSenderStrategy {
     @Override
     public void send(Notification notification) {
         try {
-            emailSender.setFrom(new InternetAddress("noreply@sputnik.com"));
+            emailSender.setFrom(new InternetAddress("noreply@ca.ulaval.ift6002.sputnik.com"));
             emailSender.setSubject(notification.getSubject());
             emailSender.setBody(notification.getMessage());
             emailSender.send();

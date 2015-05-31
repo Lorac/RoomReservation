@@ -1,14 +1,14 @@
 package ca.ulaval.ift6002.sputnik.applicationservice.reservations;
 
 import ca.ulaval.ift6002.sputnik.applicationservice.shared.locator.ServiceLocator;
-import ca.ulaval.ift6002.sputnik.domain.mailbox.Mailbox;
-import ca.ulaval.ift6002.sputnik.domain.notification.NotificationFactory;
-import ca.ulaval.ift6002.sputnik.domain.notification.NotificationSenderStrategy;
-import ca.ulaval.ift6002.sputnik.domain.request.RequestIdentifier;
-import ca.ulaval.ift6002.sputnik.domain.request.RoomRequest;
-import ca.ulaval.ift6002.sputnik.domain.request.RoomRequestRepository;
-import ca.ulaval.ift6002.sputnik.domain.room.Room;
-import ca.ulaval.ift6002.sputnik.domain.room.RoomRepository;
+import ca.ulaval.ift6002.sputnik.domain.core.mailbox.Mailbox;
+import ca.ulaval.ift6002.sputnik.domain.core.notification.NotificationFactory;
+import ca.ulaval.ift6002.sputnik.domain.core.notification.NotificationSenderStrategy;
+import ca.ulaval.ift6002.sputnik.domain.core.request.RequestIdentifier;
+import ca.ulaval.ift6002.sputnik.domain.core.request.RoomRequest;
+import ca.ulaval.ift6002.sputnik.domain.core.request.RoomRequestRepository;
+import ca.ulaval.ift6002.sputnik.domain.core.room.Room;
+import ca.ulaval.ift6002.sputnik.domain.core.room.RoomRepository;
 import ca.ulaval.ift6002.sputnik.strategy.assignation.FindRoomStrategy;
 
 import java.util.List;
@@ -64,7 +64,7 @@ public class ReservationApplicationService {
 
     private void cancelRoomRequest(RoomRequest request) {
         if (request.hasRoomAssign()) {
-            Room room = roomRepository.findRoomByNumber(request.getRoomNumber());
+            Room room = (Room) roomRepository.findRoomByNumber(request.getRoomNumber());
             releaseRoom(room);
         }
         request.cancel(notificationSender, notificationFactory);
@@ -86,10 +86,10 @@ public class ReservationApplicationService {
     private void assignRoomToRequest(RoomRequest roomRequest, Room accommodatingRoom) {
         reserveRoom(accommodatingRoom);
         roomRequest.assignRoom(accommodatingRoom);
-        persistReservation(roomRequest, accommodatingRoom);
+        persistReservation(roomRequest);
     }
 
-    private void persistReservation(RoomRequest roomRequest, Room accommodatingRoom) {
+    private void persistReservation(RoomRequest roomRequest) {
         roomRequest.confirm(notificationSender, notificationFactory);
         roomRequestRepository.persist(roomRequest);
     }

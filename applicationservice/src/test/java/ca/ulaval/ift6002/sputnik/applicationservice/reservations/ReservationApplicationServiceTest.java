@@ -1,16 +1,16 @@
 package ca.ulaval.ift6002.sputnik.applicationservice.reservations;
 
-import ca.ulaval.ift6002.sputnik.domain.mailbox.Mailbox;
-import ca.ulaval.ift6002.sputnik.domain.notification.NotificationFactory;
-import ca.ulaval.ift6002.sputnik.domain.notification.NotificationSenderStrategy;
-import ca.ulaval.ift6002.sputnik.domain.request.Priority;
-import ca.ulaval.ift6002.sputnik.domain.request.RequestIdentifier;
-import ca.ulaval.ift6002.sputnik.domain.request.RoomRequest;
-import ca.ulaval.ift6002.sputnik.domain.request.RoomRequestRepository;
-import ca.ulaval.ift6002.sputnik.domain.room.Room;
-import ca.ulaval.ift6002.sputnik.domain.room.RoomNumber;
-import ca.ulaval.ift6002.sputnik.domain.room.RoomRepository;
-import ca.ulaval.ift6002.sputnik.domain.user.User;
+import ca.ulaval.ift6002.sputnik.domain.core.mailbox.Mailbox;
+import ca.ulaval.ift6002.sputnik.domain.core.notification.NotificationFactory;
+import ca.ulaval.ift6002.sputnik.domain.core.notification.NotificationSenderStrategy;
+import ca.ulaval.ift6002.sputnik.domain.core.request.Priority;
+import ca.ulaval.ift6002.sputnik.domain.core.request.RequestIdentifier;
+import ca.ulaval.ift6002.sputnik.domain.core.request.RoomRequest;
+import ca.ulaval.ift6002.sputnik.domain.core.request.RoomRequestRepository;
+import ca.ulaval.ift6002.sputnik.domain.core.room.Room;
+import ca.ulaval.ift6002.sputnik.domain.core.room.RoomNumber;
+import ca.ulaval.ift6002.sputnik.domain.core.room.RoomRepository;
+import ca.ulaval.ift6002.sputnik.domain.core.user.User;
 import ca.ulaval.ift6002.sputnik.strategy.assignation.FindFirstRoomStrategy;
 import ca.ulaval.ift6002.sputnik.strategy.assignation.FindRoomStrategy;
 import ca.ulaval.ift6002.sputnik.strategy.sorting.DefaultStrategy;

@@ -15,7 +15,7 @@ import java.util.List;
 
 public class SputnikServer {
 
-    private final static String RESOURCES_PACKAGE = "ca.ulaval.ift6002.sputnik.interfaces.rest.resources";
+    private final static String RESOURCES_PACKAGE = "ca.ulaval.ift6002.ca.ulaval.ift6002.sputnik.interfaces.rest.resources";
 
     private Server server;
 
