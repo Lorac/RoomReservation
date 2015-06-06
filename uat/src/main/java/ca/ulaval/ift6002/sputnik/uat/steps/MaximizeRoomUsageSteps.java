@@ -2,22 +2,15 @@ package ca.ulaval.ift6002.sputnik.uat.steps;
 
 import ca.ulaval.ift6002.sputnik.applicationservice.reservations.ReservationApplicationService;
 import ca.ulaval.ift6002.sputnik.applicationservice.shared.locator.ServiceLocator;
-import ca.ulaval.ift6002.sputnik.domain.core.request.Priority;
-import ca.ulaval.ift6002.sputnik.domain.core.request.RequestIdentifier;
-import ca.ulaval.ift6002.sputnik.domain.core.request.RoomRequest;
-import ca.ulaval.ift6002.sputnik.domain.core.request.RoomRequestRepository;
-import ca.ulaval.ift6002.sputnik.domain.core.room.RoomNumber;
-import ca.ulaval.ift6002.sputnik.domain.core.room.RoomRepository;
-import ca.ulaval.ift6002.sputnik.domain.core.room.StandardRoom;
+import ca.ulaval.ift6002.sputnik.domain.core.request.*;
+import ca.ulaval.ift6002.sputnik.domain.core.room.*;
 import ca.ulaval.ift6002.sputnik.domain.core.user.User;
 import ca.ulaval.ift6002.sputnik.strategy.assignation.FindRoomStrategy;
 import ca.ulaval.ift6002.sputnik.strategy.assignation.MaximizeRoomUsageStrategy;
 import ca.ulaval.ift6002.sputnik.uat.steps.MaximizeRoomUsageSteps.MaximizeRoomUsageStepsState;
 import ca.ulaval.ift6002.sputnik.uat.steps.state.StatefulStep;
 import ca.ulaval.ift6002.sputnik.uat.steps.state.StepState;
-import org.jbehave.core.annotations.Given;
-import org.jbehave.core.annotations.Then;
-import org.jbehave.core.annotations.When;
+import org.jbehave.core.annotations.*;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -114,7 +107,7 @@ public class MaximizeRoomUsageSteps extends StatefulStep<MaximizeRoomUsageStepsS
         return roomRequestRepository.findReservationByIdentifier(identifier);
     }
 
-    public class MaximizeRoomUsageStepsState extends StepState {
+    protected class MaximizeRoomUsageStepsState extends StepState {
 
     }
 }

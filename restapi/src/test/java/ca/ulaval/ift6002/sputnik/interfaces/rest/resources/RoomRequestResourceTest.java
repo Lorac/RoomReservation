@@ -26,6 +26,7 @@ public class RoomRequestResourceTest {
     @InjectMocks
     private RoomRequestResource resource;
 
+
     @Test
     public void tryingToFindARoomRequestShouldForwardToTheService() {
         resource.getRoomRequest(EMAIL, VALID_ROOM_REQUEST_IDENTIFIER.describe());

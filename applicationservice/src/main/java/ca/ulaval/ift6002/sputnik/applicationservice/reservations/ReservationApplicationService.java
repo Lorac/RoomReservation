@@ -4,9 +4,7 @@ import ca.ulaval.ift6002.sputnik.applicationservice.shared.locator.ServiceLocato
 import ca.ulaval.ift6002.sputnik.domain.core.mailbox.Mailbox;
 import ca.ulaval.ift6002.sputnik.domain.core.notification.NotificationFactory;
 import ca.ulaval.ift6002.sputnik.domain.core.notification.NotificationSenderStrategy;
-import ca.ulaval.ift6002.sputnik.domain.core.request.RequestIdentifier;
-import ca.ulaval.ift6002.sputnik.domain.core.request.RoomRequest;
-import ca.ulaval.ift6002.sputnik.domain.core.request.RoomRequestRepository;
+import ca.ulaval.ift6002.sputnik.domain.core.request.*;
 import ca.ulaval.ift6002.sputnik.domain.core.room.Room;
 import ca.ulaval.ift6002.sputnik.domain.core.room.RoomRepository;
 import ca.ulaval.ift6002.sputnik.strategy.assignation.FindRoomStrategy;
@@ -101,11 +99,15 @@ public class ReservationApplicationService {
 
     public RoomRequest getRequest(String email, RequestIdentifier roomRequestIdentifier) {
         RoomRequest roomRequest = roomRequestRepository.findReservationByIdentifier(roomRequestIdentifier);
-        if(roomRequest.hasSameOrganizer(email)) {
-            return roomRequest;
-        } else {
-            throw new NotSameEmailException();
+        if (roomRequest == null) {
+            roomRequest = mailbox.getRoomRequestByIdentifier(roomRequestIdentifier);
+            if (roomRequest.hasSameOrganizer(email)) {
+                return roomRequest;
+            } else {
+                throw new NotSameEmailException();
+            }
         }
+        return roomRequest;
     }
 
     private void releaseRoom(Room room) {

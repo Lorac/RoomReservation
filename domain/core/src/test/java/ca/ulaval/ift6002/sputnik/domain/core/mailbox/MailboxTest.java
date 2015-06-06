@@ -14,7 +14,6 @@ import java.util.NoSuchElementException;
 import static junit.framework.TestCase.assertEquals;
 import static junit.framework.TestCase.assertFalse;
 import static org.junit.Assert.assertTrue;
-import static org.mockito.BDDMockito.willReturn;
 import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -77,13 +76,6 @@ public class MailboxTest {
         RoomRequest roomRequestFound = mailbox.getRoomRequestByIdentifier(ROOM_REQUEST_IDENTIFIER);
 
         assertEquals(roomRequest, roomRequestFound);
-    }
-
-    private RoomRequest givenARoom() {
-        RoomRequest roomRequest = mock(RoomRequest.class);
-        willReturn(true).given(roomRequest).hasIdentifier(ROOM_REQUEST_IDENTIFIER);
-        mailbox.add(roomRequest);
-        return roomRequest;
     }
 
     @Test(expected = NoSuchElementException.class)

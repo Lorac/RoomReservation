@@ -4,15 +4,15 @@ import ca.ulaval.ift6002.sputnik.applicationservice.shared.persistence.EntityMan
 
 import javax.persistence.EntityManager;
 
-public abstract class HibernateRepository {
+abstract class HibernateRepository {
 
-    protected EntityManager entityManager = null;
+    EntityManager entityManager = null;
 
-    public HibernateRepository() {
+    HibernateRepository() {
         entityManager = new EntityManagerProvider().getEntityManager();
     }
 
-    public HibernateRepository(EntityManager entityManager) {
+    HibernateRepository(EntityManager entityManager) {
         this.entityManager = entityManager;
     }
 }

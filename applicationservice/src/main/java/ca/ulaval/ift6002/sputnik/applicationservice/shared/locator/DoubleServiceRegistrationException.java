@@ -1,6 +1,6 @@
 package ca.ulaval.ift6002.sputnik.applicationservice.shared.locator;
 
-public class DoubleServiceRegistrationException extends RuntimeException {
+class DoubleServiceRegistrationException extends RuntimeException {
     private static final long serialVersionUID = 1L;
 
     public DoubleServiceRegistrationException(Class<?> service) {

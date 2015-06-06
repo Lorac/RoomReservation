@@ -1,13 +1,8 @@
 package ca.ulaval.ift6002.sputnik.persistence.memory;
 
-import ca.ulaval.ift6002.sputnik.domain.core.request.RequestIdentifier;
-import ca.ulaval.ift6002.sputnik.domain.core.request.RoomRequest;
-import ca.ulaval.ift6002.sputnik.domain.core.request.RoomRequestRepository;
+import ca.ulaval.ift6002.sputnik.domain.core.request.*;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class RoomRequestRepositoryInMemory implements RoomRequestRepository {
 

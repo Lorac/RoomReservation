@@ -1,9 +1,7 @@
 package ca.ulaval.ift6002.sputnik.domain.core.request;
 
 
-import ca.ulaval.ift6002.sputnik.domain.core.notification.Notification;
-import ca.ulaval.ift6002.sputnik.domain.core.notification.NotificationFactory;
-import ca.ulaval.ift6002.sputnik.domain.core.notification.NotificationSenderStrategy;
+import ca.ulaval.ift6002.sputnik.domain.core.notification.*;
 import ca.ulaval.ift6002.sputnik.domain.core.room.Room;
 import ca.ulaval.ift6002.sputnik.domain.core.room.RoomNumber;
 import ca.ulaval.ift6002.sputnik.domain.core.user.User;
@@ -12,41 +10,37 @@ import javax.persistence.*;
 import javax.xml.bind.annotation.XmlTransient;
 import java.io.Serializable;
 import java.time.Instant;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 @Entity(name = "DEMANDE")
 public class RoomRequest implements Serializable {
 
     @XmlTransient
     private final static int ADD_ORGANIZER_TO_SEATS_NEEDED = 1;
-
     @AttributeOverride(name = "email", column = @Column(name = "ORGANIZER"))
     @Embedded
     private final User organizer;
-
     @AttributeOverride(name = "number", column = @Column(name = "REQUEST_IDENTIFER"))
     @EmbeddedId
     private final RequestIdentifier identifier;
-
+    @XmlTransient
+    private Instant timeOfAssignation;
     @ElementCollection()
     private List<User> attendees = new ArrayList<>();
-
     @Embedded
     private RoomNumber assignedRoomNumber;
 
     @Enumerated
     private Priority priority = Priority.NORMAL;
-    private Instant timeOfAssignation;
-    private Status status;
+
+    @Enumerated
+    private Status status = Status.WAITING;
 
     public RoomRequest(RequestIdentifier identifier, Priority priority, User organizer, List<User> attendees) {
         this.priority = priority;
         this.organizer = organizer;
         this.attendees = new LinkedList<>(attendees);
         this.identifier = identifier;
-        this.status = Status.WAITING;
     }
 
     protected RoomRequest() {
@@ -123,7 +117,7 @@ public class RoomRequest implements Serializable {
     }
 
     public boolean hasSameOrganizer(String email) {
-        return organizer.equals(email);
+        return organizer.hasEmail(email);
     }
 
     private void notifyOrganizer(NotificationSenderStrategy notificationSender, Notification notification) {
@@ -132,9 +126,7 @@ public class RoomRequest implements Serializable {
     }
 
     private void notifyAttendees(NotificationSenderStrategy notificationSender, Notification notification) {
-        for (User attendee : attendees) {
-            notificationSender.addRecipient(attendee);
-        }
+        attendees.forEach(notificationSender::addRecipient);
         notificationSender.send(notification);
     }
 

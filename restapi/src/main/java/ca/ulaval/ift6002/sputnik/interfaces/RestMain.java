@@ -6,7 +6,7 @@ import ca.ulaval.ift6002.sputnik.interfaces.rest.server.SputnikServer;
 
 import java.util.Arrays;
 
-public class RestMain {
+class RestMain {
     private final static int DEFAULT_PORT = 8081;
 
     private RestMain() {

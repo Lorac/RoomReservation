@@ -5,9 +5,7 @@ import ca.ulaval.ift6002.sputnik.domain.core.request.RequestIdentifier;
 import ca.ulaval.ift6002.sputnik.domain.core.request.RoomRequest;
 import ca.ulaval.ift6002.sputnik.strategy.sorting.SortingStrategy;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Queue;
+import java.util.*;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class Mailbox implements Observable {
@@ -52,9 +50,7 @@ public class Mailbox implements Observable {
 
     @Override
     public void notifyObservers() {
-        for (MailboxObserver mailboxObserver : mailboxObservers) {
-            mailboxObserver.notifyNewRoomRequest();
-        }
+        mailboxObservers.forEach(MailboxObserver::notifyNewRoomRequest);
     }
 
     public RoomRequest getRoomRequestByIdentifier(RequestIdentifier identifier) {

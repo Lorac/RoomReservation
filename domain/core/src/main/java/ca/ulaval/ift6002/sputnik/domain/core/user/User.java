@@ -25,4 +25,12 @@ public class User {
     public String getEmail() {
         return email;
     }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public boolean hasEmail(String email) {
+        return this.email.equals(email);
+    }
 }

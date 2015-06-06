@@ -3,30 +3,18 @@ package ca.ulaval.ift6002.sputnik.applicationservice.reservations;
 import ca.ulaval.ift6002.sputnik.domain.core.mailbox.Mailbox;
 import ca.ulaval.ift6002.sputnik.domain.core.notification.NotificationFactory;
 import ca.ulaval.ift6002.sputnik.domain.core.notification.NotificationSenderStrategy;
-import ca.ulaval.ift6002.sputnik.domain.core.request.Priority;
-import ca.ulaval.ift6002.sputnik.domain.core.request.RequestIdentifier;
-import ca.ulaval.ift6002.sputnik.domain.core.request.RoomRequest;
-import ca.ulaval.ift6002.sputnik.domain.core.request.RoomRequestRepository;
-import ca.ulaval.ift6002.sputnik.domain.core.room.Room;
-import ca.ulaval.ift6002.sputnik.domain.core.room.RoomNumber;
-import ca.ulaval.ift6002.sputnik.domain.core.room.RoomRepository;
-import ca.ulaval.ift6002.sputnik.domain.core.user.User;
+import ca.ulaval.ift6002.sputnik.domain.core.request.*;
+import ca.ulaval.ift6002.sputnik.domain.core.room.*;
 import ca.ulaval.ift6002.sputnik.strategy.assignation.FindFirstRoomStrategy;
 import ca.ulaval.ift6002.sputnik.strategy.assignation.FindRoomStrategy;
-import ca.ulaval.ift6002.sputnik.strategy.sorting.DefaultStrategy;
-import ca.ulaval.ift6002.sputnik.strategy.sorting.PriorityStrategy;
-import ca.ulaval.ift6002.sputnik.strategy.sorting.SortingStrategy;
+import ca.ulaval.ift6002.sputnik.strategy.sorting.*;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.InOrder;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
+import org.mockito.*;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import java.util.LinkedList;
-import java.util.List;
-import java.util.NoSuchElementException;
+import java.util.*;
 
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyInt;
@@ -39,7 +27,6 @@ public class ReservationApplicationServiceTest {
     private static final int TWO = 2;
 
     private static final String EMAIL = "SOMEONE@SPUTNIK.COM";
-    private static final User USER = new User(EMAIL);
 
     private static final RequestIdentifier VALID_REQUEST_IDENTIFIER = RequestIdentifier.create();
     private static final RequestIdentifier INVALID_REQUEST_IDENTIFIER = RequestIdentifier.create();

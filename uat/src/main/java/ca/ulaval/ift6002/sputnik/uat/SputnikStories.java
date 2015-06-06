@@ -35,7 +35,7 @@ public class SputnikStories extends JUnitStories {
 
     private Embedder embedder = new Embedder();
 
-    public SputnikStories() {
+    private SputnikStories() {
         useEmbedder(embedder);
     }
 

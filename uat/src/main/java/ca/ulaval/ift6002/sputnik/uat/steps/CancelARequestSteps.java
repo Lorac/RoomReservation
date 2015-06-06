@@ -3,17 +3,12 @@ package ca.ulaval.ift6002.sputnik.uat.steps;
 import ca.ulaval.ift6002.sputnik.applicationservice.reservations.ReservationApplicationService;
 import ca.ulaval.ift6002.sputnik.applicationservice.shared.locator.ServiceLocator;
 import ca.ulaval.ift6002.sputnik.domain.core.request.*;
-import ca.ulaval.ift6002.sputnik.domain.core.room.Room;
-import ca.ulaval.ift6002.sputnik.domain.core.room.RoomNumber;
-import ca.ulaval.ift6002.sputnik.domain.core.room.RoomRepository;
-import ca.ulaval.ift6002.sputnik.domain.core.room.StandardRoom;
+import ca.ulaval.ift6002.sputnik.domain.core.room.*;
 import ca.ulaval.ift6002.sputnik.domain.core.user.User;
 import ca.ulaval.ift6002.sputnik.uat.steps.CancelARequestSteps.CancelARequestStepsState;
 import ca.ulaval.ift6002.sputnik.uat.steps.state.StatefulStep;
 import ca.ulaval.ift6002.sputnik.uat.steps.state.StepState;
-import org.jbehave.core.annotations.Given;
-import org.jbehave.core.annotations.Then;
-import org.jbehave.core.annotations.When;
+import org.jbehave.core.annotations.*;
 
 import java.util.LinkedList;
 
@@ -23,7 +18,7 @@ public class CancelARequestSteps extends StatefulStep<CancelARequestStepsState> 
 
     private static final RoomNumber ROOM_NUMBER = new RoomNumber("RN1");
     private static final int CAPACITY = 10;
-    private final String emailOrganizer = "organizer@ca.ulaval.ift6002.sputnik.com";
+    private final String emailOrganizer = "organizer@sputnik.com";
 
     protected CancelARequestStepsState getInitialState() {
         return new CancelARequestStepsState();
