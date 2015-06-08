@@ -5,34 +5,38 @@ import ca.ulaval.ift6002.sputnik.domain.core.notification.*;
 import ca.ulaval.ift6002.sputnik.domain.core.room.Room;
 import ca.ulaval.ift6002.sputnik.domain.core.room.RoomNumber;
 import ca.ulaval.ift6002.sputnik.domain.core.user.User;
+import com.fasterxml.jackson.annotation.*;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
 import javax.persistence.*;
-import javax.xml.bind.annotation.XmlTransient;
 import java.io.Serializable;
 import java.time.Instant;
 import java.util.*;
 
 @Entity(name = "DEMANDE")
+@JsonInclude(Include.NON_NULL)
 public class RoomRequest implements Serializable {
 
-    @XmlTransient
     private final static int ADD_ORGANIZER_TO_SEATS_NEEDED = 1;
+
     @AttributeOverride(name = "email", column = @Column(name = "ORGANIZER"))
     @Embedded
+    @JsonUnwrapped
     private final User organizer;
+
     @AttributeOverride(name = "number", column = @Column(name = "REQUEST_IDENTIFER"))
     @EmbeddedId
+    @JsonIgnore
     private final RequestIdentifier identifier;
-    @XmlTransient
+    @JsonIgnore
     private Instant timeOfAssignation;
     @ElementCollection()
     private List<User> attendees = new ArrayList<>();
     @Embedded
+    @JsonUnwrapped
     private RoomNumber assignedRoomNumber;
-
     @Enumerated
     private Priority priority = Priority.NORMAL;
-
     @Enumerated
     private Status status = Status.WAITING;
 
@@ -46,6 +50,14 @@ public class RoomRequest implements Serializable {
     protected RoomRequest() {
         identifier = null;
         organizer = null;
+    }
+
+    public Status getStatus() {
+        return status;
+    }
+
+    public User getOrganizer() {
+        return organizer;
     }
 
     public RoomNumber getRoomNumber() {

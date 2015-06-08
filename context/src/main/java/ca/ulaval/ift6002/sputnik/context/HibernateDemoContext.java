@@ -8,10 +8,11 @@ import ca.ulaval.ift6002.sputnik.domain.core.hibernate.room.HibernateRoom;
 import ca.ulaval.ift6002.sputnik.domain.core.mailbox.Mailbox;
 import ca.ulaval.ift6002.sputnik.domain.core.notification.NotificationFactory;
 import ca.ulaval.ift6002.sputnik.domain.core.notification.NotificationSenderStrategy;
-import ca.ulaval.ift6002.sputnik.domain.core.request.RoomRequestRepository;
+import ca.ulaval.ift6002.sputnik.domain.core.request.*;
 import ca.ulaval.ift6002.sputnik.domain.core.room.Room;
 import ca.ulaval.ift6002.sputnik.domain.core.room.RoomNumber;
 import ca.ulaval.ift6002.sputnik.domain.core.room.RoomRepository;
+import ca.ulaval.ift6002.sputnik.domain.core.user.User;
 import ca.ulaval.ift6002.sputnik.emailsender.JavaxMailSender;
 import ca.ulaval.ift6002.sputnik.emailsender.notification.JavaxMailSenderStrategy;
 import ca.ulaval.ift6002.sputnik.persistence.hibernate.HibernateRoomRepository;
@@ -21,7 +22,7 @@ import ca.ulaval.ift6002.sputnik.strategy.assignation.FindRoomStrategy;
 import ca.ulaval.ift6002.sputnik.strategy.sorting.DefaultStrategy;
 import com.dumbster.smtp.SimpleSmtpServer;
 
-import java.util.Properties;
+import java.util.*;
 
 public class HibernateDemoContext extends ContextBase {
 
@@ -44,6 +45,7 @@ public class HibernateDemoContext extends ContextBase {
     protected void applyFillers() {
 
         RoomRepository roomRepository = ServiceLocator.getInstance().resolve(RoomRepository.class);
+        RoomRequestRepository roomRequestRepository = ServiceLocator.getInstance().resolve(RoomRequestRepository.class);
         Room room1 = new HibernateRoom(new RoomNumber("PLT-3904"), 50);
         Room room2 = new HibernateRoom(new RoomNumber("PLT-2551"), 30);
         Room room3 = new HibernateRoom(new RoomNumber("VCH-2860"), 75);
@@ -51,6 +53,27 @@ public class HibernateDemoContext extends ContextBase {
         roomRepository.persist(room1);
         roomRepository.persist(room2);
         roomRepository.persist(room3);
+
+        RequestIdentifier requestIdentifier1 = RequestIdentifier.create();
+        RequestIdentifier requestIdentifier2 = RequestIdentifier.create();
+        RequestIdentifier requestIdentifier3 = RequestIdentifier.create();
+
+        System.out.println(requestIdentifier1.describe());
+        System.out.println(requestIdentifier2.describe());
+        System.out.println(requestIdentifier3.describe());
+        List<User> users = new LinkedList<>();
+        users.add(new User("patate"));
+        users.add(new User("patate2"));
+        users.add(new User("patate3"));
+        users.add(new User("patate4"));
+        RoomRequest roomRequest1 = new RoomRequest(requestIdentifier1, Priority.NORMAL, new User("mroussin@hotmail.com"), users);
+        RoomRequest roomRequest2 = new RoomRequest(requestIdentifier2, Priority.HIGH, new User("patate@hotmail.com"), new LinkedList<>());
+        RoomRequest roomRequest3 = new RoomRequest(requestIdentifier3, Priority.LOW, new User("chef@hotmail.com"), new LinkedList<>());
+
+        roomRequestRepository.persist(roomRequest1);
+        roomRequestRepository.persist(roomRequest2);
+        roomRequestRepository.persist(roomRequest3);
+
     }
 
     private Properties getMailProperties(int port) {
