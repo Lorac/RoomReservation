@@ -96,7 +96,7 @@
                     <execution>
                         <configuration>
                             <mainClass>
-                                ca.ulaval.ift6002.ca.ulaval.ift6002.ca.ulaval.ift6002.sputnik.uat.SputnikStories
+                                ca.ulaval.ift6002.sputnik.uat.SputnikStories
                             </mainClass>
                         </configuration>
                         <goals>

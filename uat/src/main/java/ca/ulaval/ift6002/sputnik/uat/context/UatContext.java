@@ -22,7 +22,7 @@ import java.util.Properties;
 
 public class UatContext extends ContextBase {
 
-    private static final int SMTP_PORT = 8080;
+    private static final int SMTP_PORT = 8852;
 
     public void stopMailServer() {
         SimpleSmtpServer server = ServiceLocator.getInstance().resolve(SimpleSmtpServer.class);

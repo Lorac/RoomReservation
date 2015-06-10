@@ -2,7 +2,7 @@ package ca.ulaval.ift6002.sputnik.uat.context;
 
 import org.jbehave.core.annotations.*;
 
-class SputnitUATRunner {
+public class SputnitUATRunner {
     private static UatContext context;
 
     @BeforeStories

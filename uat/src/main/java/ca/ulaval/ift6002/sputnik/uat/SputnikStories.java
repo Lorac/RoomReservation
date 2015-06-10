@@ -22,8 +22,8 @@ import static org.jbehave.core.reporters.Format.CONSOLE;
 
 public class SputnikStories extends JUnitStories {
 
+    protected Embedder embedder = new Embedder();
     private PendingStepStrategy pendingStepStrategy = new FailingUponPendingStep();
-
     private Format[] formats = new Format[]{CONSOLE};
     private StoryReporterBuilder reporterBuilder =
             new StoryReporterBuilder()
@@ -33,9 +33,7 @@ public class SputnikStories extends JUnitStories {
                     .withDefaultFormats()
                     .withFormats(formats);
 
-    private Embedder embedder = new Embedder();
-
-    private SputnikStories() {
+    public SputnikStories() {
         useEmbedder(embedder);
     }
 
