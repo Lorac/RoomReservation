@@ -2,13 +2,13 @@ package ca.ulaval.ift6002.sputnik.domain.core.request;
 
 import java.util.List;
 
-public interface RoomRequestRepository {
+public interface RoomRequestRepository<T> {
 
-    RoomRequest findReservationByIdentifier(RequestIdentifier identifier);
+    T findReservationByIdentifier(RequestIdentifier identifier);
 
-    List<RoomRequest> findAll();
+    List<T> findAll();
 
-    void update(RoomRequest roomRequest);
+    void update(T roomRequest);
 
-    void persist(RoomRequest roomRequest);
+    void persist(T roomRequest);
 }

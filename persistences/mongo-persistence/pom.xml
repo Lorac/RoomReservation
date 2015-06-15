@@ -24,32 +24,9 @@
         </dependency>
         <dependency>
             <groupId>de.bwaldvogel</groupId>
-            <artifactId>mongo-java-server-memory-backend</artifactId>
-            <version>1.4.0</version>
-            <scope>system</scope>
-            <systemPath>${basedir}/../../libs/mongo-java-server-memory-backend-1.4.0.jar</systemPath>
-        </dependency>
-        <dependency>
-            <groupId>de.bwaldvogel</groupId>
-            <artifactId>mongo-java-server-core</artifactId>
-            <version>1.4.0</version>
-            <scope>system</scope>
-            <systemPath>${basedir}/../../libs/mongo-java-server-core-1.4.0.jar</systemPath>
-        </dependency>
-        <dependency>
-            <groupId>io.netty</groupId>
-            <artifactId>netty-codec</artifactId>
-            <version>4.1.0.Beta5</version>
-        </dependency>
-        <dependency>
-            <groupId>io.netty</groupId>
-            <artifactId>netty-transport</artifactId>
-            <version>4.1.0.Beta5</version>
-        </dependency>
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-api</artifactId>
-            <version>1.7.12</version>
+            <artifactId>mongo-java-server</artifactId>
+            <version>1.4.1</version>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 </project>

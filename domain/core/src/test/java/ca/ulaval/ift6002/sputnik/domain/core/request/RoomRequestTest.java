@@ -41,7 +41,7 @@ public class RoomRequestTest {
 
     @Test
     public void hasIdentifierIfComparedToTheInitialIdentifiedUUID() {
-        RoomRequest roomRequest = new RoomRequest(VALID_ROOM_REQUEST_IDENTIFIER, PRIORITY, USER, ATTENDEES);
+        RoomRequest roomRequest = new StandardRoomRequest(VALID_ROOM_REQUEST_IDENTIFIER, PRIORITY, USER, ATTENDEES);
 
         boolean sameIdentifier = roomRequest.hasIdentifier(VALID_ROOM_REQUEST_IDENTIFIER);
 
@@ -50,7 +50,7 @@ public class RoomRequestTest {
 
     @Test
     public void hasIdentifierIfComparedToADifferentIdentifier() {
-        RoomRequest roomRequest = new RoomRequest(VALID_ROOM_REQUEST_IDENTIFIER, PRIORITY, USER, ATTENDEES);
+        RoomRequest roomRequest = new StandardRoomRequest(VALID_ROOM_REQUEST_IDENTIFIER, PRIORITY, USER, ATTENDEES);
 
         boolean sameIdentifier = roomRequest.hasIdentifier(INVALID_ROOM_REQUEST_IDENTIFIER);
 
@@ -73,7 +73,7 @@ public class RoomRequestTest {
 
     @Test
     public void whenCancellingARoomRequestItShouldSendEmailToOrganizerAndAttendees() {
-        RoomRequest roomRequest = new RoomRequest(VALID_ROOM_REQUEST_IDENTIFIER, PRIORITY, USER, ATTENDEES);
+        RoomRequest roomRequest = new StandardRoomRequest(VALID_ROOM_REQUEST_IDENTIFIER, PRIORITY, USER, ATTENDEES);
 
         roomRequest.cancel(notificationSender, notificationFactory);
 
@@ -83,7 +83,7 @@ public class RoomRequestTest {
     @Test
     public void whenCancellingARoomRequestItShouldAddAllTheAttendeesPlusOrganizerToTheRecipientList() {
         giveAmountOfAttendees();
-        RoomRequest roomRequest = new RoomRequest(VALID_ROOM_REQUEST_IDENTIFIER, PRIORITY, USER, ATTENDEES);
+        RoomRequest roomRequest = new StandardRoomRequest(VALID_ROOM_REQUEST_IDENTIFIER, PRIORITY, USER, ATTENDEES);
 
         roomRequest.cancel(notificationSender, notificationFactory);
 
@@ -99,7 +99,7 @@ public class RoomRequestTest {
 
     @Test
     public void whenARoomRequestIsAcceptedThenTheOrganizerIsNotified() {
-        RoomRequest roomRequest = new RoomRequest(VALID_ROOM_REQUEST_IDENTIFIER, PRIORITY, USER, ATTENDEES);
+        RoomRequest roomRequest = new StandardRoomRequest(VALID_ROOM_REQUEST_IDENTIFIER, PRIORITY, USER, ATTENDEES);
 
         roomRequest.confirm(notificationSender, notificationFactory);
 
@@ -117,7 +117,7 @@ public class RoomRequestTest {
 
     private RoomRequest givenARoomRequestWithRoomAssigned() {
         Room mockedRoom = givenARoom();
-        RoomRequest roomRequest = new RoomRequest(VALID_ROOM_REQUEST_IDENTIFIER, PRIORITY, USER, ATTENDEES);
+        RoomRequest roomRequest = new StandardRoomRequest(VALID_ROOM_REQUEST_IDENTIFIER, PRIORITY, USER, ATTENDEES);
         roomRequest.assignRoom(mockedRoom);
         return roomRequest;
     }
@@ -135,7 +135,7 @@ public class RoomRequestTest {
     }
 
     private RoomRequest whenRoomRequestIsRefused() {
-        RoomRequest roomRequest = new RoomRequest(VALID_ROOM_REQUEST_IDENTIFIER, PRIORITY, USER, ATTENDEES);
+        RoomRequest roomRequest = new StandardRoomRequest(VALID_ROOM_REQUEST_IDENTIFIER, PRIORITY, USER, ATTENDEES);
         roomRequest.refuse(notificationSender, new NotificationFactory());
         return roomRequest;
     }

@@ -5,87 +5,48 @@ import ca.ulaval.ift6002.sputnik.domain.core.notification.*;
 import ca.ulaval.ift6002.sputnik.domain.core.room.Room;
 import ca.ulaval.ift6002.sputnik.domain.core.room.RoomNumber;
 import ca.ulaval.ift6002.sputnik.domain.core.user.User;
-import com.fasterxml.jackson.annotation.*;
-import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
-import javax.persistence.*;
 import java.io.Serializable;
 import java.time.Instant;
-import java.util.*;
+import java.util.List;
 
-@Entity(name = "DEMANDE")
-@JsonInclude(Include.NON_NULL)
-public class RoomRequest implements Serializable {
 
-    private final static int ADD_ORGANIZER_TO_SEATS_NEEDED = 1;
+public abstract class RoomRequest implements Serializable {
 
-    @AttributeOverride(name = "email", column = @Column(name = "ORGANIZER"))
-    @Embedded
-    @JsonUnwrapped
-    private final User organizer;
 
-    @AttributeOverride(name = "number", column = @Column(name = "REQUEST_IDENTIFER"))
-    @EmbeddedId
-    @JsonIgnore
-    private final RequestIdentifier identifier;
-    @JsonIgnore
     private Instant timeOfAssignation;
-    @ElementCollection()
-    private List<User> attendees = new ArrayList<>();
-    @Embedded
-    @JsonUnwrapped
-    private RoomNumber assignedRoomNumber;
-    @Enumerated
-    private Priority priority = Priority.NORMAL;
-    @Enumerated
-    private Status status = Status.WAITING;
-
-    public RoomRequest(RequestIdentifier identifier, Priority priority, User organizer, List<User> attendees) {
-        this.priority = priority;
-        this.organizer = organizer;
-        this.attendees = new LinkedList<>(attendees);
-        this.identifier = identifier;
-    }
 
     protected RoomRequest() {
-        identifier = null;
-        organizer = null;
     }
 
-    public Status getStatus() {
-        return status;
-    }
+    public abstract Status getStatus();
 
-    public User getOrganizer() {
-        return organizer;
-    }
+    public abstract void setStatus(Status status);
 
-    public RoomNumber getRoomNumber() {
-        return assignedRoomNumber;
-    }
+    protected abstract List<User> getAttendees();
 
-    public int getNumberOfSeatsNeeded() {
-        return attendees.size() + ADD_ORGANIZER_TO_SEATS_NEEDED;
-    }
+    public abstract User getOrganizer();
 
-    public Priority getPriority() {
-        return priority;
-    }
+    public abstract RoomNumber getRoomNumber();
+
+    protected abstract void setRoomNumber(RoomNumber roomNumber);
+
+    public abstract int getNumberOfSeatsNeeded();
+
+    public abstract Priority getPriority();
+
+    public abstract RequestIdentifier getIdentifier();
 
     public boolean hasIdentifier(RequestIdentifier identifier) {
-        return this.identifier.isSame(identifier);
-    }
-
-    public RequestIdentifier getIdentifier() {
-        return identifier;
+        return getIdentifier().isSame(identifier);
     }
 
     public boolean hasStatus(Status status) {
-        return this.status.equals(status);
+        return getStatus().equals(status);
     }
 
     public void refuse(NotificationSenderStrategy notificationSender, NotificationFactory notificationFactory) {
-        status = Status.REFUSED;
+        setStatus(Status.REFUSED);
 
         Notification insufficientRoomNotification = notificationFactory.createInsufficientRoomNotification();
 
@@ -93,7 +54,7 @@ public class RoomRequest implements Serializable {
     }
 
     public void cancel(NotificationSenderStrategy notificationSender, NotificationFactory notificationFactory) {
-        status = Status.CANCELED;
+        setStatus(Status.CANCELED);
 
         Notification notification = createAppropriateCancellationNotification(notificationFactory);
 
@@ -104,20 +65,20 @@ public class RoomRequest implements Serializable {
     }
 
     public void confirm(NotificationSenderStrategy notificationSender, NotificationFactory notificationFactory) {
-        status = Status.ACCEPTED;
+        setStatus(Status.ACCEPTED);
 
-        Notification successNotification = notificationFactory.createSuccessNotification(assignedRoomNumber);
+        Notification successNotification = notificationFactory.createSuccessNotification(getRoomNumber());
 
         notifyOrganizer(notificationSender, successNotification);
     }
 
     public void assignRoom(Room room) {
         timeOfAssignation = Instant.now();
-        this.assignedRoomNumber = room.getRoomNumber();
+        setRoomNumber(room.getRoomNumber());
     }
 
     public boolean hasRoomAssign() {
-        return assignedRoomNumber != null;
+        return getRoomNumber() != null;
     }
 
     public Instant getTimeOfAssignation() {
@@ -125,27 +86,27 @@ public class RoomRequest implements Serializable {
     }
 
     private void unAssignedRoom() {
-        assignedRoomNumber = null;
+        setRoomNumber(null);
     }
 
     public boolean hasSameOrganizer(String email) {
-        return organizer.hasEmail(email);
+        return getOrganizer().hasEmail(email);
     }
 
     private void notifyOrganizer(NotificationSenderStrategy notificationSender, Notification notification) {
-        notificationSender.addRecipient(organizer);
+        notificationSender.addRecipient(getOrganizer());
         notificationSender.send(notification);
     }
 
     private void notifyAttendees(NotificationSenderStrategy notificationSender, Notification notification) {
-        attendees.forEach(notificationSender::addRecipient);
+        getAttendees().forEach(notificationSender::addRecipient);
         notificationSender.send(notification);
     }
 
     private Notification createAppropriateCancellationNotification(NotificationFactory notificationFactory) {
         Notification notification;
         if (hasRoomAssign()) {
-            notification = notificationFactory.createCanceledNotification(assignedRoomNumber);
+            notification = notificationFactory.createCanceledNotification(getRoomNumber());
         } else {
             notification = notificationFactory.createCanceledNotification();
         }

@@ -1,17 +1,12 @@
 package ca.ulaval.ift6002.sputnik.persistence.mongodb;
 
 import ca.ulaval.ift6002.sputnik.domain.core.mongo.room.MongoRoom;
-import ca.ulaval.ift6002.sputnik.domain.core.room.Room;
-import ca.ulaval.ift6002.sputnik.domain.core.room.RoomNotFoundException;
-import ca.ulaval.ift6002.sputnik.domain.core.room.RoomNumber;
-import ca.ulaval.ift6002.sputnik.domain.core.room.RoomRepository;
+import ca.ulaval.ift6002.sputnik.domain.core.room.*;
 import com.mongodb.MongoClient;
 import com.mongodb.ServerAddress;
 import de.bwaldvogel.mongo.MongoServer;
 import de.bwaldvogel.mongo.backend.memory.MemoryBackend;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.*;
 import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.mongodb.morphia.Morphia;
