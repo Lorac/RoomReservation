@@ -5,13 +5,12 @@ import ca.ulaval.ift6002.sputnik.applicationservice.shared.locator.ServiceLocato
 import ca.ulaval.ift6002.sputnik.applicationservice.shared.persistence.EntityManagerFactoryProvider;
 import ca.ulaval.ift6002.sputnik.applicationservice.shared.persistence.EntityManagerProvider;
 import ca.ulaval.ift6002.sputnik.domain.core.hibernate.room.HibernateRoom;
+import ca.ulaval.ift6002.sputnik.domain.core.hibernate.room.HibernateRoomRequest;
 import ca.ulaval.ift6002.sputnik.domain.core.mailbox.Mailbox;
 import ca.ulaval.ift6002.sputnik.domain.core.notification.NotificationFactory;
 import ca.ulaval.ift6002.sputnik.domain.core.notification.NotificationSenderStrategy;
 import ca.ulaval.ift6002.sputnik.domain.core.request.*;
-import ca.ulaval.ift6002.sputnik.domain.core.room.Room;
-import ca.ulaval.ift6002.sputnik.domain.core.room.RoomNumber;
-import ca.ulaval.ift6002.sputnik.domain.core.room.RoomRepository;
+import ca.ulaval.ift6002.sputnik.domain.core.room.*;
 import ca.ulaval.ift6002.sputnik.domain.core.user.User;
 import ca.ulaval.ift6002.sputnik.emailsender.JavaxMailSender;
 import ca.ulaval.ift6002.sputnik.emailsender.notification.JavaxMailSenderStrategy;
@@ -61,14 +60,16 @@ public class HibernateDemoContext extends ContextBase {
         System.out.println(requestIdentifier1.describe());
         System.out.println(requestIdentifier2.describe());
         System.out.println(requestIdentifier3.describe());
+
         List<User> users = new LinkedList<>();
-        users.add(new User("patate"));
-        users.add(new User("patate2"));
-        users.add(new User("patate3"));
-        users.add(new User("patate4"));
-        RoomRequest roomRequest1 = new RoomRequest(requestIdentifier1, Priority.NORMAL, new User("mroussin@hotmail.com"), users);
-        RoomRequest roomRequest2 = new RoomRequest(requestIdentifier2, Priority.HIGH, new User("patate@hotmail.com"), new LinkedList<>());
-        RoomRequest roomRequest3 = new RoomRequest(requestIdentifier3, Priority.LOW, new User("chef@hotmail.com"), new LinkedList<>());
+        users.add(new User("username1"));
+        users.add(new User("username2"));
+        users.add(new User("username3"));
+        users.add(new User("username4"));
+
+        RoomRequest roomRequest1 = new HibernateRoomRequest(requestIdentifier1, Priority.NORMAL, new User("mroussin@hotmail.com"), users);
+        RoomRequest roomRequest2 = new HibernateRoomRequest(requestIdentifier2, Priority.HIGH, new User("patate@hotmail.com"), new LinkedList<>());
+        RoomRequest roomRequest3 = new HibernateRoomRequest(requestIdentifier3, Priority.LOW, new User("chef@hotmail.com"), new LinkedList<>());
 
         roomRequestRepository.persist(roomRequest1);
         roomRequestRepository.persist(roomRequest2);

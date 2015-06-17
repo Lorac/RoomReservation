@@ -4,7 +4,7 @@ import ca.ulaval.ift6002.sputnik.domain.core.request.*;
 
 import java.util.*;
 
-public class RoomRequestRepositoryInMemory implements RoomRequestRepository {
+public class RoomRequestRepositoryInMemory implements RoomRequestRepository<RoomRequest> {
 
     private Map<RequestIdentifier, RoomRequest> reservations;
 

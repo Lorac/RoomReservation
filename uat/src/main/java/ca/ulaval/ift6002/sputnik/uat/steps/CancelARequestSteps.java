@@ -26,7 +26,7 @@ public class CancelARequestSteps extends StatefulStep<CancelARequestStepsState> 
 
     @Given("a room request without a room assigned")
     public void givenARoomRequestWithoutARoomAssigned() {
-        state().roomRequest = new RoomRequest(RequestIdentifier.create(), Priority.NORMAL, new User(emailOrganizer), new LinkedList<>());
+        state().roomRequest = new StandardRoomRequest(RequestIdentifier.create(), Priority.NORMAL, new User(emailOrganizer), new LinkedList<>());
 
         ReservationApplicationService reservationApplicationService = getReservationApplicationService();
         reservationApplicationService.addRequest(state().roomRequest);
@@ -34,7 +34,7 @@ public class CancelARequestSteps extends StatefulStep<CancelARequestStepsState> 
 
     @Given("a room request with a room assigned")
     public void givenARoomRequestWithARoomAssigned() {
-        state().roomRequest = new RoomRequest(RequestIdentifier.create(), Priority.NORMAL, new User(emailOrganizer), new LinkedList<>());
+        state().roomRequest = new StandardRoomRequest(RequestIdentifier.create(), Priority.NORMAL, new User(emailOrganizer), new LinkedList<>());
         Room room = persistARoom();
         state().roomRequest.assignRoom(room);
 
@@ -83,7 +83,7 @@ public class CancelARequestSteps extends StatefulStep<CancelARequestStepsState> 
     }
 
     private void createReservation() {
-        state().roomRequest = new RoomRequest(RequestIdentifier.create(), Priority.NORMAL, new User(emailOrganizer), new LinkedList<>());
+        state().roomRequest = new StandardRoomRequest(RequestIdentifier.create(), Priority.NORMAL, new User(emailOrganizer), new LinkedList<>());
         RoomRequestRepository roomRequestRepository = getReservationRepository();
         roomRequestRepository.persist(state().roomRequest);
     }

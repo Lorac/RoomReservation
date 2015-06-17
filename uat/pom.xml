@@ -16,7 +16,7 @@
         <dependency>
             <groupId>org.jbehave</groupId>
             <artifactId>jbehave-core</artifactId>
-            <version>4.0-beta-11</version>
+            <version>4.0.1</version>
         </dependency>
         <dependency>
             <groupId>com.jayway.restassured</groupId>
@@ -56,17 +56,17 @@
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>4.12</version>
+            <version>${junit.version}</version>
         </dependency>
         <dependency>
             <groupId>javax.mail</groupId>
             <artifactId>mail</artifactId>
-            <version>1.5.0-b01</version>
+            <version>${javax.mail.version}</version>
         </dependency>
         <dependency>
             <groupId>dumbster</groupId>
             <artifactId>dumbster</artifactId>
-            <version>1.6</version>
+            <version>${dumbster.version}</version>
         </dependency>
     </dependencies>
 

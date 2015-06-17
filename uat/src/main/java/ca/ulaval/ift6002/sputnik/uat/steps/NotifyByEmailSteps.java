@@ -2,31 +2,18 @@ package ca.ulaval.ift6002.sputnik.uat.steps;
 
 import ca.ulaval.ift6002.sputnik.applicationservice.reservations.ReservationApplicationService;
 import ca.ulaval.ift6002.sputnik.applicationservice.shared.locator.ServiceLocator;
-import ca.ulaval.ift6002.sputnik.domain.core.notification.CanceledNotification;
-import ca.ulaval.ift6002.sputnik.domain.core.notification.InsufficientRoomNotification;
-import ca.ulaval.ift6002.sputnik.domain.core.notification.Notification;
-import ca.ulaval.ift6002.sputnik.domain.core.notification.SuccessNotification;
-import ca.ulaval.ift6002.sputnik.domain.core.request.Priority;
-import ca.ulaval.ift6002.sputnik.domain.core.request.RequestIdentifier;
-import ca.ulaval.ift6002.sputnik.domain.core.request.RoomRequest;
-import ca.ulaval.ift6002.sputnik.domain.core.request.RoomRequestRepository;
-import ca.ulaval.ift6002.sputnik.domain.core.room.Room;
-import ca.ulaval.ift6002.sputnik.domain.core.room.RoomNumber;
-import ca.ulaval.ift6002.sputnik.domain.core.room.RoomRepository;
-import ca.ulaval.ift6002.sputnik.domain.core.room.StandardRoom;
+import ca.ulaval.ift6002.sputnik.domain.core.notification.*;
+import ca.ulaval.ift6002.sputnik.domain.core.request.*;
+import ca.ulaval.ift6002.sputnik.domain.core.room.*;
 import ca.ulaval.ift6002.sputnik.domain.core.user.User;
 import ca.ulaval.ift6002.sputnik.uat.steps.NotifyByEmailSteps.NotifyByEmailAfterProcessingStepsState;
 import ca.ulaval.ift6002.sputnik.uat.steps.state.StatefulStep;
 import ca.ulaval.ift6002.sputnik.uat.steps.state.StepState;
 import com.dumbster.smtp.SimpleSmtpServer;
 import com.dumbster.smtp.SmtpMessage;
-import org.jbehave.core.annotations.Given;
-import org.jbehave.core.annotations.Then;
-import org.jbehave.core.annotations.When;
+import org.jbehave.core.annotations.*;
 
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 import static junit.framework.TestCase.assertEquals;
 
@@ -45,7 +32,7 @@ public class NotifyByEmailSteps extends StatefulStep<NotifyByEmailAfterProcessin
 
     @Given("a room request")
     public void givenARoomRequest() {
-        state().roomRequest = new RoomRequest(RequestIdentifier.create(), Priority.NORMAL, new User(emailOrganizer), new LinkedList<>());
+        state().roomRequest = new StandardRoomRequest(RequestIdentifier.create(), Priority.NORMAL, new User(emailOrganizer), new LinkedList<>());
         ReservationApplicationService reservationApplicationService = getReservationApplicationService();
         reservationApplicationService.addRequest(state().roomRequest);
     }
@@ -55,7 +42,7 @@ public class NotifyByEmailSteps extends StatefulStep<NotifyByEmailAfterProcessin
         RoomRepository repository = getRoomRepository();
         repository.persist(ASSIGNED_ROOM);
 
-        state().roomRequest = new RoomRequest(RequestIdentifier.create(), Priority.NORMAL, new User(emailOrganizer), new LinkedList<>());
+        state().roomRequest = new StandardRoomRequest(RequestIdentifier.create(), Priority.NORMAL, new User(emailOrganizer), new LinkedList<>());
         state().roomRequest.assignRoom(ASSIGNED_ROOM);
 
         ReservationApplicationService reservationApplicationService = getReservationApplicationService();
@@ -166,7 +153,7 @@ public class NotifyByEmailSteps extends StatefulStep<NotifyByEmailAfterProcessin
     private RoomRequest findReservationWithRequest(RoomRequest roomRequest) {
         RoomRequestRepository roomRequestRepository = getReservationRepository();
         RequestIdentifier identifier = roomRequest.getIdentifier();
-        return roomRequestRepository.findReservationByIdentifier(identifier);
+        return (RoomRequest) roomRequestRepository.findReservationByIdentifier(identifier);
     }
 
     public class NotifyByEmailAfterProcessingStepsState extends StepState {

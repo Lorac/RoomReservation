@@ -45,7 +45,7 @@ public class ReservationApplicationService {
     }
 
     public void cancelRequest(RequestIdentifier identifier) {
-        RoomRequest request = roomRequestRepository.findReservationByIdentifier(identifier);
+        RoomRequest request = (RoomRequest) roomRequestRepository.findReservationByIdentifier(identifier);
         if (request == null) {
             request = mailbox.getRoomRequestByIdentifier(identifier);
         }
@@ -98,7 +98,7 @@ public class ReservationApplicationService {
     }
 
     public RoomRequest getRequest(String email, RequestIdentifier roomRequestIdentifier) {
-        RoomRequest roomRequest = roomRequestRepository.findReservationByIdentifier(roomRequestIdentifier);
+        RoomRequest roomRequest = (RoomRequest) roomRequestRepository.findReservationByIdentifier(roomRequestIdentifier);
         if (roomRequest == null) {
             roomRequest = mailbox.getRoomRequestByIdentifier(roomRequestIdentifier);
             if (roomRequest.hasSameOrganizer(email)) {

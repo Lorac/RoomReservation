@@ -31,7 +31,7 @@ public class MaximizeRoomUsageSteps extends StatefulStep<MaximizeRoomUsageStepsS
 
     @Given("a room request with attendees")
     public void givenARoomRequestWithAttendees() {
-        state().roomRequest = new RoomRequest(RequestIdentifier.create(), Priority.NORMAL, new User(EMAIL_ORGANIZER), getAttendees(NUMBER_OF_ATTENDEES));
+        state().roomRequest = new StandardRoomRequest(RequestIdentifier.create(), Priority.NORMAL, new User(EMAIL_ORGANIZER), getAttendees(NUMBER_OF_ATTENDEES));
         switchToMaximumRoomUsageStrategy();
         ReservationApplicationService reservationApplicationService = getReservationApplicationService();
         reservationApplicationService.addRequest(state().roomRequest);
@@ -104,7 +104,7 @@ public class MaximizeRoomUsageSteps extends StatefulStep<MaximizeRoomUsageStepsS
     private RoomRequest findReservationWithRequest(RoomRequest roomRequest) {
         RoomRequestRepository roomRequestRepository = getReservationRepository();
         RequestIdentifier identifier = roomRequest.getIdentifier();
-        return roomRequestRepository.findReservationByIdentifier(identifier);
+        return (RoomRequest) roomRequestRepository.findReservationByIdentifier(identifier);
     }
 
     protected class MaximizeRoomUsageStepsState extends StepState {
