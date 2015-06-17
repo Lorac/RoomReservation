@@ -1,6 +1,4 @@
 language: java
-notifications:
-  slack: sputnik2015:nWweXzDFDO3TWilZp7NWZzBN
 jdk:
   - oraclejdk8
 env:
