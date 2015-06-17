@@ -20,7 +20,7 @@
         <dependency>
             <groupId>org.mongodb.morphia</groupId>
             <artifactId>morphia</artifactId>
-            <version>1.0.0-rc1</version>
+            <version>${morphia.version}</version>
         </dependency>
         <dependency>
             <groupId>de.bwaldvogel</groupId>

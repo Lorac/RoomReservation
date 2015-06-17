@@ -15,7 +15,7 @@
         <dependency>
             <groupId>org.hibernate.javax.persistence</groupId>
             <artifactId>hibernate-jpa-2.1-api</artifactId>
-            <version>1.0.0.Final</version>
+            <version>${hibernate-jpa-2.1-api.version}</version>
         </dependency>
         <dependency>
             <groupId>ca.ulaval.ift6002</groupId>

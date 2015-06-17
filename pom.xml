@@ -20,6 +20,34 @@
 
     <packaging>pom</packaging>
 
+    <issueManagement>
+        <url>https://github.com/Lorac/RoomReservation/issues</url>
+        <system>GitHub Issues</system>
+    </issueManagement>
+
+    <developers>
+        <developer>
+            <email>maxime.roussinbelanger@gmail.com</email>
+            <name>Maxime Roussin-Belanger</name>
+            <url>https://github.com/Lorac/</url>
+            <id>Lorac</id>
+        </developer>
+    </developers>
+
+    <licenses>
+        <license>
+            <name>MIT License</name>
+            <url>http://www.opensource.org/licenses/mit-license.php</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
+    <scm>
+        <connection>scm:git:git@github.com:Lorac/RoomReservation.git</connection>
+        <developerConnection>scm:git:git@github.com:Lorac/RoomReservation.git</developerConnection>
+        <url>git@github.com:Lorac/RoomReservation.git</url>
+    </scm>
+
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <java.version>1.8</java.version>
@@ -29,6 +57,17 @@
         <sonar.language>java</sonar.language>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <hibernate.entitymanager.version>5.0.0.CR1</hibernate.entitymanager.version>
+        <com.h2database.version>1.4.187</com.h2database.version>
+        <dumbster.version>1.6</dumbster.version>
+        <junit.version>4.12</junit.version>
+        <mockito-all.version>2.0.2-beta</mockito-all.version>
+        <javax.mail.version>1.5.0-b01</javax.mail.version>
+        <hibernate-jpa-2.1-api.version>1.0.0.Draft-16</hibernate-jpa-2.1-api.version>
+        <jersey-media-json-jackson.version>2.18</jersey-media-json-jackson.version>
+        <jetty-server.version>9.3.0.v20150612</jetty-server.version>
+        <jersey-container-jetty-servlet.version>2.18</jersey-container-jetty-servlet.version>
+        <morphia.version>1.0.1</morphia.version>
     </properties>
 
     <build>
@@ -41,6 +80,11 @@
                     <source>${java.version}</source>
                     <target>${java.version}</target>
                 </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-release-plugin</artifactId>
+                <version>2.4.1</version>
             </plugin>
             <plugin>
                 <groupId>org.jacoco</groupId>
