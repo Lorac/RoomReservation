@@ -2,22 +2,15 @@ package ca.ulaval.ift6002.sputnik.uat.steps;
 
 import ca.ulaval.ift6002.sputnik.applicationservice.reservations.ReservationApplicationService;
 import ca.ulaval.ift6002.sputnik.applicationservice.shared.locator.ServiceLocator;
-import ca.ulaval.ift6002.sputnik.domain.mailbox.Mailbox;
-import ca.ulaval.ift6002.sputnik.domain.request.Priority;
-import ca.ulaval.ift6002.sputnik.domain.request.RequestIdentifier;
-import ca.ulaval.ift6002.sputnik.domain.request.RoomRequest;
-import ca.ulaval.ift6002.sputnik.domain.request.RoomRequestRepository;
-import ca.ulaval.ift6002.sputnik.domain.room.Room;
-import ca.ulaval.ift6002.sputnik.domain.room.RoomNumber;
-import ca.ulaval.ift6002.sputnik.domain.room.RoomRepository;
-import ca.ulaval.ift6002.sputnik.domain.user.User;
+import ca.ulaval.ift6002.sputnik.domain.core.mailbox.Mailbox;
+import ca.ulaval.ift6002.sputnik.domain.core.request.*;
+import ca.ulaval.ift6002.sputnik.domain.core.room.*;
+import ca.ulaval.ift6002.sputnik.domain.core.user.User;
 import ca.ulaval.ift6002.sputnik.strategy.sorting.PriorityStrategy;
 import ca.ulaval.ift6002.sputnik.uat.steps.AssignRoomsPeriodicallyToRoomRequestSteps.AssignRoomsStepsState;
 import ca.ulaval.ift6002.sputnik.uat.steps.state.StatefulStep;
 import ca.ulaval.ift6002.sputnik.uat.steps.state.StepState;
-import org.jbehave.core.annotations.Given;
-import org.jbehave.core.annotations.Then;
-import org.jbehave.core.annotations.When;
+import org.jbehave.core.annotations.*;
 
 import java.util.LinkedList;
 
@@ -37,14 +30,14 @@ public class AssignRoomsPeriodicallyToRoomRequestSteps extends StatefulStep<Assi
     @Given("a first room request")
     public void givenAFirstRoomRequest() {
         ReservationApplicationService reservationApplicationService = getReservationApplicationService();
-        state().firstRequest = new RoomRequest(RequestIdentifier.create(), Priority.NORMAL, new User(EMAIL), new LinkedList<>());
+        state().firstRequest = new StandardRoomRequest(RequestIdentifier.create(), Priority.NORMAL, new User(EMAIL), new LinkedList<>());
         reservationApplicationService.addRequest(state().firstRequest);
     }
 
     @Given("a second room request")
     public void givenASecondRoomRequest() {
         ReservationApplicationService reservationApplicationService = getReservationApplicationService();
-        state().secondRequest = new RoomRequest(RequestIdentifier.create(), Priority.NORMAL, new User(EMAIL), new LinkedList<>());
+        state().secondRequest = new StandardRoomRequest(RequestIdentifier.create(), Priority.NORMAL, new User(EMAIL), new LinkedList<>());
         reservationApplicationService.addRequest(state().secondRequest);
     }
 
@@ -52,7 +45,7 @@ public class AssignRoomsPeriodicallyToRoomRequestSteps extends StatefulStep<Assi
     public void givenAnAmountOfRoomRequest() {
         ReservationApplicationService reservationApplicationService = getReservationApplicationService();
         for (int i = 0; i < FIVE; i++) {
-            RoomRequest roomRequest = new RoomRequest(RequestIdentifier.create(), Priority.NORMAL, new User(EMAIL), new LinkedList<>());
+            RoomRequest roomRequest = new StandardRoomRequest(RequestIdentifier.create(), Priority.NORMAL, new User(EMAIL), new LinkedList<>());
             reservationApplicationService.addRequest(roomRequest);
         }
     }
@@ -61,21 +54,21 @@ public class AssignRoomsPeriodicallyToRoomRequestSteps extends StatefulStep<Assi
     public void givenAnAmountOfFiveRooms() {
         RoomRepository repository = getRoomRepository();
         for (int i = 0; i < FIVE; i++) {
-            repository.persist(new Room(new RoomNumber(String.format("SPUT-%s", i)), 10));
+            repository.persist(new StandardRoom(new RoomNumber(String.format("SPUT-%s", i)), 10));
         }
     }
 
     @Given("a room request with low priority")
     public void givenARoomRequestWithPriorityLow() {
         switchToPrioritySortingStrategy();
-        state().lowPriorityRequest = new ca.ulaval.ift6002.sputnik.domain.request.RoomRequest(RequestIdentifier.create(), Priority.LOW, new User(EMAIL), new LinkedList<>());
+        state().lowPriorityRequest = new StandardRoomRequest(RequestIdentifier.create(), Priority.LOW, new User(EMAIL), new LinkedList<>());
         ReservationApplicationService reservationApplicationService = getReservationApplicationService();
         reservationApplicationService.addRequest(state().lowPriorityRequest);
     }
 
     @Given("a room request with high priority")
     public void givenARoomRequestWithPriorityHigh() {
-        state().highPriorityRequest = new ca.ulaval.ift6002.sputnik.domain.request.RoomRequest(RequestIdentifier.create(), Priority.HIGH, new User(EMAIL), new LinkedList<>());
+        state().highPriorityRequest = new StandardRoomRequest(RequestIdentifier.create(), Priority.HIGH, new User(EMAIL), new LinkedList<>());
         ReservationApplicationService reservationApplicationService = getReservationApplicationService();
         reservationApplicationService.addRequest(state().highPriorityRequest);
     }
@@ -127,10 +120,10 @@ public class AssignRoomsPeriodicallyToRoomRequestSteps extends StatefulStep<Assi
         ServiceLocator.getInstance().register(ReservationApplicationService.class, new ReservationApplicationService());
     }
 
-    private RoomRequest findReservationWithRequest(ca.ulaval.ift6002.sputnik.domain.request.RoomRequest roomRequest) {
+    private RoomRequest findReservationWithRequest(RoomRequest roomRequest) {
         RoomRequestRepository roomRequestRepository = getReservationRepository();
         RequestIdentifier identifier = roomRequest.getIdentifier();
-        return roomRequestRepository.findReservationByIdentifier(identifier);
+        return (RoomRequest) roomRequestRepository.findReservationByIdentifier(identifier);
     }
 
     public class AssignRoomsStepsState extends StepState {

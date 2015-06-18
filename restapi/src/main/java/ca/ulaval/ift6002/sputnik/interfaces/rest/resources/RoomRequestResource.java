@@ -2,10 +2,15 @@ package ca.ulaval.ift6002.sputnik.interfaces.rest.resources;
 
 import ca.ulaval.ift6002.sputnik.applicationservice.reservations.InvalidRoomRequestFormApplicationException;
 import ca.ulaval.ift6002.sputnik.applicationservice.reservations.ReservationApplicationService;
+<<<<<<< HEAD
 import ca.ulaval.ift6002.sputnik.applicationservice.reservations.RoomRequestForm;
 import ca.ulaval.ift6002.sputnik.domain.request.RequestIdentifier;
 import ca.ulaval.ift6002.sputnik.domain.request.RoomRequest;
 import ca.ulaval.ift6002.sputnik.persistence.hibernate.RoomRequestNotFoundException;
+=======
+import ca.ulaval.ift6002.sputnik.domain.core.request.RequestIdentifier;
+import ca.ulaval.ift6002.sputnik.domain.core.request.RoomRequest;
+>>>>>>> master
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -17,7 +22,7 @@ import java.util.UUID;
 @Produces(MediaType.APPLICATION_JSON)
 public class RoomRequestResource {
 
-    private ReservationApplicationService service;
+    private final ReservationApplicationService service;
 
     public RoomRequestResource() {
         service = new ReservationApplicationService();

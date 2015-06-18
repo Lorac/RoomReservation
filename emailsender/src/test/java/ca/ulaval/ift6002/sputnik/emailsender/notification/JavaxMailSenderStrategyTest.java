@@ -1,8 +1,8 @@
 package ca.ulaval.ift6002.sputnik.emailsender.notification;
 
-import ca.ulaval.ift6002.sputnik.domain.notification.Notification;
-import ca.ulaval.ift6002.sputnik.domain.notification.NotificationSenderStrategy;
-import ca.ulaval.ift6002.sputnik.domain.user.User;
+import ca.ulaval.ift6002.sputnik.domain.core.notification.Notification;
+import ca.ulaval.ift6002.sputnik.domain.core.notification.NotificationSenderStrategy;
+import ca.ulaval.ift6002.sputnik.domain.core.user.User;
 import ca.ulaval.ift6002.sputnik.emailsender.JavaxMailSender;
 import org.junit.Before;
 import org.junit.Test;

@@ -1,16 +1,13 @@
 package ca.ulaval.ift6002.sputnik.applicationservice.reservations;
 
 import ca.ulaval.ift6002.sputnik.applicationservice.shared.locator.ServiceLocator;
-import ca.ulaval.ift6002.sputnik.domain.mailbox.Mailbox;
-import ca.ulaval.ift6002.sputnik.domain.notification.NotificationFactory;
-import ca.ulaval.ift6002.sputnik.domain.notification.NotificationSenderStrategy;
-import ca.ulaval.ift6002.sputnik.domain.request.Priority;
-import ca.ulaval.ift6002.sputnik.domain.request.RequestIdentifier;
-import ca.ulaval.ift6002.sputnik.domain.request.RoomRequest;
-import ca.ulaval.ift6002.sputnik.domain.request.RoomRequestRepository;
-import ca.ulaval.ift6002.sputnik.domain.room.Room;
-import ca.ulaval.ift6002.sputnik.domain.room.RoomRepository;
-import ca.ulaval.ift6002.sputnik.domain.user.User;
+import ca.ulaval.ift6002.sputnik.domain.core.mailbox.Mailbox;
+import ca.ulaval.ift6002.sputnik.domain.core.notification.NotificationFactory;
+import ca.ulaval.ift6002.sputnik.domain.core.notification.NotificationSenderStrategy;
+import ca.ulaval.ift6002.sputnik.domain.core.request.*;
+import ca.ulaval.ift6002.sputnik.domain.core.room.Room;
+import ca.ulaval.ift6002.sputnik.domain.core.room.RoomRepository;
+import ca.ulaval.ift6002.sputnik.domain.core.user.User;
 import ca.ulaval.ift6002.sputnik.strategy.assignation.FindRoomStrategy;
 
 import java.util.ArrayList;
@@ -46,7 +43,7 @@ public class ReservationApplicationService {
     }
 
     public void cancelRequest(RequestIdentifier identifier) {
-        RoomRequest request = roomRequestRepository.findReservationByIdentifier(identifier);
+        RoomRequest request = (RoomRequest) roomRequestRepository.findReservationByIdentifier(identifier);
         if (request == null) {
             request = mailbox.getRoomRequestByIdentifier(identifier);
         }
@@ -66,7 +63,7 @@ public class ReservationApplicationService {
         try {
             roomRequest = mailbox.getRoomRequestByIdentifier(roomRequestIdentifier);
         } catch (NoSuchElementException ignore) {
-            roomRequest = roomRequestRepository.findReservationByIdentifier(roomRequestIdentifier);
+            roomRequest = (RoomRequest) roomRequestRepository.findReservationByIdentifier(roomRequestIdentifier);
         }
 
         if (roomRequest.hasSameOrganizer(email)) {
@@ -79,7 +76,7 @@ public class ReservationApplicationService {
         validateForm(roomRequestForm);
 
         RequestIdentifier roomRequestIdentifier = RequestIdentifier.create();
-        RoomRequest roomRequest = new RoomRequest(roomRequestIdentifier, Priority.fromInteger(roomRequestForm.priority), new User(roomRequestForm.organizerEmail), new ArrayList<>());
+        RoomRequest roomRequest = new StandardRoomRequest(roomRequestIdentifier, Priority.fromInteger(roomRequestForm.priority), new User(roomRequestForm.organizerEmail), new ArrayList<>());
 
         mailbox.add(roomRequest);
 
@@ -100,7 +97,7 @@ public class ReservationApplicationService {
 
     private void cancelRoomRequest(RoomRequest request) {
         if (request.hasRoomAssign()) {
-            Room room = roomRepository.findRoomByNumber(request.getRoomNumber());
+            Room room = (Room) roomRepository.findRoomByNumber(request.getRoomNumber());
             releaseRoom(room);
         }
         request.cancel(notificationSender, notificationFactory);
@@ -122,10 +119,10 @@ public class ReservationApplicationService {
     private void assignRoomToRequest(RoomRequest roomRequest, Room accommodatingRoom) {
         reserveRoom(accommodatingRoom);
         roomRequest.assignRoom(accommodatingRoom);
-        persistReservation(roomRequest, accommodatingRoom);
+        persistReservation(roomRequest);
     }
 
-    private void persistReservation(RoomRequest roomRequest, Room accommodatingRoom) {
+    private void persistReservation(RoomRequest roomRequest) {
         roomRequest.confirm(notificationSender, notificationFactory);
         roomRequestRepository.persist(roomRequest);
     }
@@ -133,6 +130,19 @@ public class ReservationApplicationService {
     private void reserveRoom(Room room) {
         room.reserve();
         roomRepository.persist(room);
+    }
+
+    public RoomRequest getRequest(String email, RequestIdentifier roomRequestIdentifier) {
+        RoomRequest roomRequest = (RoomRequest) roomRequestRepository.findReservationByIdentifier(roomRequestIdentifier);
+        if (roomRequest == null) {
+            roomRequest = mailbox.getRoomRequestByIdentifier(roomRequestIdentifier);
+            if (roomRequest.hasSameOrganizer(email)) {
+                return roomRequest;
+            } else {
+                throw new NotSameEmailException();
+            }
+        }
+        return roomRequest;
     }
 
     private void releaseRoom(Room room) {

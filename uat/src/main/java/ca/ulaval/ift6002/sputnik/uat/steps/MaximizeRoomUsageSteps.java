@@ -1,18 +1,19 @@
 package ca.ulaval.ift6002.sputnik.uat.steps;
 
 import ca.ulaval.ift6002.sputnik.applicationservice.reservations.ReservationApplicationService;
+import ca.ulaval.ift6002.sputnik.applicationservice.reservations.RoomRequestForm;
 import ca.ulaval.ift6002.sputnik.applicationservice.shared.locator.ServiceLocator;
-import ca.ulaval.ift6002.sputnik.domain.request.Priority;
-import ca.ulaval.ift6002.sputnik.domain.request.RequestIdentifier;
-import ca.ulaval.ift6002.sputnik.domain.request.RoomRequest;
-import ca.ulaval.ift6002.sputnik.domain.request.RoomRequestRepository;
-import ca.ulaval.ift6002.sputnik.domain.room.Room;
-import ca.ulaval.ift6002.sputnik.domain.room.RoomNumber;
-import ca.ulaval.ift6002.sputnik.domain.room.RoomRepository;
-import ca.ulaval.ift6002.sputnik.domain.user.User;
+import ca.ulaval.ift6002.sputnik.domain.core.request.RequestIdentifier;
+import ca.ulaval.ift6002.sputnik.domain.core.request.RoomRequest;
+import ca.ulaval.ift6002.sputnik.domain.core.request.RoomRequestRepository;
+import ca.ulaval.ift6002.sputnik.domain.core.room.RoomNumber;
+import ca.ulaval.ift6002.sputnik.domain.core.room.RoomRepository;
+import ca.ulaval.ift6002.sputnik.domain.core.room.StandardRoom;
+import ca.ulaval.ift6002.sputnik.domain.core.user.User;
 import ca.ulaval.ift6002.sputnik.strategy.assignation.FindRoomStrategy;
 import ca.ulaval.ift6002.sputnik.strategy.assignation.MaximizeRoomUsageStrategy;
 import ca.ulaval.ift6002.sputnik.uat.steps.MaximizeRoomUsageSteps.MaximizeRoomUsageStepsState;
+import ca.ulaval.ift6002.sputnik.uat.steps.fixtures.RoomRequestBuilder;
 import ca.ulaval.ift6002.sputnik.uat.steps.state.StatefulStep;
 import ca.ulaval.ift6002.sputnik.uat.steps.state.StepState;
 import org.jbehave.core.annotations.Given;
@@ -28,8 +29,8 @@ import static junit.framework.TestCase.assertTrue;
 public class MaximizeRoomUsageSteps extends StatefulStep<MaximizeRoomUsageStepsState> {
 
     private final static int NUMBER_OF_ATTENDEES = 12;
-    private final static String EMAIL_ORGANIZER = "organizer@sputnik.com";
-    private final static String EMAIL_ATTENDEES = "attendees%s@sputnik.com";
+    private final static String EMAIL_ORGANIZER = "organizer@ca.ulaval.ift6002.sputnik.com";
+    private final static String EMAIL_ATTENDEES = "attendees%s@ca.ulaval.ift6002.sputnik.com";
     private static final int NUMBER_OF_ROOM_FOUND = 1;
 
     protected MaximizeRoomUsageStepsState getInitialState() {
@@ -38,7 +39,8 @@ public class MaximizeRoomUsageSteps extends StatefulStep<MaximizeRoomUsageStepsS
 
     @Given("a room request with attendees")
     public void givenARoomRequestWithAttendees() {
-        state().roomRequest = new ca.ulaval.ift6002.sputnik.domain.request.RoomRequest(RequestIdentifier.create(), Priority.NORMAL, new User(EMAIL_ORGANIZER), getAttendees(NUMBER_OF_ATTENDEES));
+
+        state().roomRequest = RoomRequestBuilder.createValid(NUMBER_OF_ATTENDEES).buildForm();
         switchToMaximumRoomUsageStrategy();
         ReservationApplicationService reservationApplicationService = getReservationApplicationService();
         reservationApplicationService.addRequest(state().roomRequest);
@@ -48,18 +50,18 @@ public class MaximizeRoomUsageSteps extends StatefulStep<MaximizeRoomUsageStepsS
     public void givenUnreservedRoomsOfDifferentCapacities() {
         RoomRepository roomRepository = getRoomRepository();
 
-        roomRepository.persist(new Room(new RoomNumber("SPUT-10"), 10));
-        roomRepository.persist(new Room(new RoomNumber("SPUT-20"), 20));
-        roomRepository.persist(new Room(new RoomNumber("SPUT-30"), 30));
+        roomRepository.persist(new StandardRoom(new RoomNumber("SPUT-10"), 10));
+        roomRepository.persist(new StandardRoom(new RoomNumber("SPUT-20"), 20));
+        roomRepository.persist(new StandardRoom(new RoomNumber("SPUT-30"), 30));
     }
 
     @Given("multiple unreserved rooms of same capacities")
     public void givenUnreservedRoomsOfSmeCapacities() {
         RoomRepository roomRepository = getRoomRepository();
 
-        roomRepository.persist(new Room(new RoomNumber("SPUT-20"), 20));
-        roomRepository.persist(new Room(new RoomNumber("SPUT-20"), 20));
-        roomRepository.persist(new Room(new RoomNumber("SPUT-20"), 20));
+        roomRepository.persist(new StandardRoom(new RoomNumber("SPUT-20"), 20));
+        roomRepository.persist(new StandardRoom(new RoomNumber("SPUT-20"), 20));
+        roomRepository.persist(new StandardRoom(new RoomNumber("SPUT-20"), 20));
     }
 
     @When("the room requests are processed")
@@ -108,13 +110,13 @@ public class MaximizeRoomUsageSteps extends StatefulStep<MaximizeRoomUsageStepsS
         return ServiceLocator.getInstance().resolve(ReservationApplicationService.class);
     }
 
-    private RoomRequest findReservationWithRequest(ca.ulaval.ift6002.sputnik.domain.request.RoomRequest roomRequest) {
+    private RoomRequest findReservationWithRequest(RoomRequestForm roomRequest) {
         RoomRequestRepository roomRequestRepository = getReservationRepository();
         RequestIdentifier identifier = roomRequest.getIdentifier();
-        return roomRequestRepository.findReservationByIdentifier(identifier);
+        return (RoomRequest) roomRequestRepository.findReservationByIdentifier(identifier);
     }
 
-    public class MaximizeRoomUsageStepsState extends StepState {
+    protected class MaximizeRoomUsageStepsState extends StepState {
 
     }
 }

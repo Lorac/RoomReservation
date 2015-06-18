@@ -1,2 +1,2 @@
 # RoomReservation
-The project is to develop a planning room booking system.
+The project is to develop a planning room booking library.

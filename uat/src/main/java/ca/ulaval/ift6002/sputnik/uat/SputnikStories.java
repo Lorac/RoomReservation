@@ -13,7 +13,7 @@ import org.jbehave.core.reporters.StoryReporterBuilder;
 import org.jbehave.core.steps.InjectableStepsFactory;
 import org.jbehave.core.steps.ScanningStepsFactory;
 
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import static java.util.Arrays.asList;
@@ -22,8 +22,8 @@ import static org.jbehave.core.reporters.Format.CONSOLE;
 
 public class SputnikStories extends JUnitStories {
 
+    protected Embedder embedder = new Embedder();
     private PendingStepStrategy pendingStepStrategy = new FailingUponPendingStep();
-
     private Format[] formats = new Format[]{CONSOLE};
     private StoryReporterBuilder reporterBuilder =
             new StoryReporterBuilder()
@@ -33,14 +33,12 @@ public class SputnikStories extends JUnitStories {
                     .withDefaultFormats()
                     .withFormats(formats);
 
-    private Embedder embedder = new Embedder();
-
     public SputnikStories() {
         useEmbedder(embedder);
     }
 
     public static void main(String[] args) {
-        new SputnikStories().embedder.runAsEmbeddables(Arrays.asList(SputnikStories.class.getCanonicalName()));
+        new SputnikStories().embedder.runAsEmbeddables(Collections.singletonList(SputnikStories.class.getCanonicalName()));
     }
 
     @Override

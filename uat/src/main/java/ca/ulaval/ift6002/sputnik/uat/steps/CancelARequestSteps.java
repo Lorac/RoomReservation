@@ -2,17 +2,13 @@ package ca.ulaval.ift6002.sputnik.uat.steps;
 
 import ca.ulaval.ift6002.sputnik.applicationservice.reservations.ReservationApplicationService;
 import ca.ulaval.ift6002.sputnik.applicationservice.shared.locator.ServiceLocator;
-import ca.ulaval.ift6002.sputnik.domain.request.*;
-import ca.ulaval.ift6002.sputnik.domain.room.Room;
-import ca.ulaval.ift6002.sputnik.domain.room.RoomNumber;
-import ca.ulaval.ift6002.sputnik.domain.room.RoomRepository;
-import ca.ulaval.ift6002.sputnik.domain.user.User;
+import ca.ulaval.ift6002.sputnik.domain.core.request.*;
+import ca.ulaval.ift6002.sputnik.domain.core.room.*;
+import ca.ulaval.ift6002.sputnik.domain.core.user.User;
 import ca.ulaval.ift6002.sputnik.uat.steps.CancelARequestSteps.CancelARequestStepsState;
 import ca.ulaval.ift6002.sputnik.uat.steps.state.StatefulStep;
 import ca.ulaval.ift6002.sputnik.uat.steps.state.StepState;
-import org.jbehave.core.annotations.Given;
-import org.jbehave.core.annotations.Then;
-import org.jbehave.core.annotations.When;
+import org.jbehave.core.annotations.*;
 
 import java.util.LinkedList;
 
@@ -30,7 +26,7 @@ public class CancelARequestSteps extends StatefulStep<CancelARequestStepsState> 
 
     @Given("a room request without a room assigned")
     public void givenARoomRequestWithoutARoomAssigned() {
-        state().roomRequest = new RoomRequest(RequestIdentifier.create(), Priority.NORMAL, new User(emailOrganizer), new LinkedList<>());
+        state().roomRequest = new StandardRoomRequest(RequestIdentifier.create(), Priority.NORMAL, new User(emailOrganizer), new LinkedList<>());
 
         ReservationApplicationService reservationApplicationService = getReservationApplicationService();
         reservationApplicationService.addRequest(state().roomRequest);
@@ -38,7 +34,7 @@ public class CancelARequestSteps extends StatefulStep<CancelARequestStepsState> 
 
     @Given("a room request with a room assigned")
     public void givenARoomRequestWithARoomAssigned() {
-        state().roomRequest = new RoomRequest(RequestIdentifier.create(), Priority.NORMAL, new User(emailOrganizer), new LinkedList<>());
+        state().roomRequest = new StandardRoomRequest(RequestIdentifier.create(), Priority.NORMAL, new User(emailOrganizer), new LinkedList<>());
         Room room = persistARoom();
         state().roomRequest.assignRoom(room);
 
@@ -47,7 +43,7 @@ public class CancelARequestSteps extends StatefulStep<CancelARequestStepsState> 
     }
 
     private Room persistARoom() {
-        Room room = new Room(ROOM_NUMBER, CAPACITY);
+        Room room = new StandardRoom(ROOM_NUMBER, CAPACITY);
         RoomRepository roomRepository = getRoomRepository();
         roomRepository.persist(room);
         return room;
@@ -83,11 +79,11 @@ public class CancelARequestSteps extends StatefulStep<CancelARequestStepsState> 
 
     private void createRoomForReservation() {
         RoomRepository repository = getRoomRepository();
-        repository.persist(new Room(ROOM_NUMBER, 10));
+        repository.persist(new StandardRoom(ROOM_NUMBER, 10));
     }
 
     private void createReservation() {
-        state().roomRequest = new ca.ulaval.ift6002.sputnik.domain.request.RoomRequest(RequestIdentifier.create(), Priority.NORMAL, new User(emailOrganizer), new LinkedList<>());
+        state().roomRequest = new StandardRoomRequest(RequestIdentifier.create(), Priority.NORMAL, new User(emailOrganizer), new LinkedList<>());
         RoomRequestRepository roomRequestRepository = getReservationRepository();
         roomRequestRepository.persist(state().roomRequest);
     }

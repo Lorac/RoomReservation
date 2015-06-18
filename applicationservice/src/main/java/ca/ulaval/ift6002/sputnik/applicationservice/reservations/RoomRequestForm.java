@@ -1,5 +1,7 @@
 package ca.ulaval.ift6002.sputnik.applicationservice.reservations;
 
+import ca.ulaval.ift6002.sputnik.domain.core.request.Priority;
+
 import javax.xml.bind.annotation.XmlElement;
 
 public class RoomRequestForm {
@@ -9,5 +11,5 @@ public class RoomRequestForm {
     @XmlElement(name = "courrielOrganisateur")
     public String organizerEmail;
     @XmlElement(name = "priorite")
-    public int priority;
+    public Priority priority;
 }

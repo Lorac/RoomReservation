@@ -5,16 +5,17 @@ import ca.ulaval.ift6002.sputnik.applicationservice.reservations.ReservationAppl
 import ca.ulaval.ift6002.sputnik.applicationservice.shared.locator.ServiceLocator;
 import ca.ulaval.ift6002.sputnik.applicationservice.shared.persistence.EntityManagerFactoryProvider;
 import ca.ulaval.ift6002.sputnik.applicationservice.shared.persistence.EntityManagerProvider;
-import ca.ulaval.ift6002.sputnik.domain.mailbox.Mailbox;
-import ca.ulaval.ift6002.sputnik.domain.notification.NotificationFactory;
-import ca.ulaval.ift6002.sputnik.domain.notification.NotificationSenderStrategy;
-import ca.ulaval.ift6002.sputnik.domain.request.RoomRequestRepository;
-import ca.ulaval.ift6002.sputnik.domain.room.Room;
-import ca.ulaval.ift6002.sputnik.domain.room.RoomNumber;
-import ca.ulaval.ift6002.sputnik.domain.room.RoomRepository;
+import ca.ulaval.ift6002.sputnik.domain.core.mailbox.Mailbox;
+import ca.ulaval.ift6002.sputnik.domain.core.notification.NotificationFactory;
+import ca.ulaval.ift6002.sputnik.domain.core.notification.NotificationSenderStrategy;
+import ca.ulaval.ift6002.sputnik.domain.core.request.RoomRequestRepository;
+import ca.ulaval.ift6002.sputnik.domain.core.room.Room;
+import ca.ulaval.ift6002.sputnik.domain.core.room.RoomNumber;
+import ca.ulaval.ift6002.sputnik.domain.core.room.RoomRepository;
+import ca.ulaval.ift6002.sputnik.domain.core.room.StandardRoom;
 import ca.ulaval.ift6002.sputnik.emailsender.JavaxMailSender;
 import ca.ulaval.ift6002.sputnik.emailsender.notification.JavaxMailSenderStrategy;
-import ca.ulaval.ift6002.sputnik.persistence.memory.RoomRepositoryInMemory;
+import ca.ulaval.ift6002.sputnik.persistence.memory.InMemoryRoomRepository;
 import ca.ulaval.ift6002.sputnik.persistence.memory.RoomRequestRepositoryInMemory;
 import ca.ulaval.ift6002.sputnik.strategy.assignation.FindFirstRoomStrategy;
 import ca.ulaval.ift6002.sputnik.strategy.assignation.FindRoomStrategy;
@@ -31,7 +32,7 @@ public class InMemoryDemoContext extends ContextBase {
         EntityManagerProvider.setEntityManager(EntityManagerFactoryProvider.getFactory().createEntityManager());
         ServiceLocator.getInstance().register(FindRoomStrategy.class, new FindFirstRoomStrategy());
         ServiceLocator.getInstance().register(Mailbox.class, new Mailbox(new DefaultStrategy()));
-        ServiceLocator.getInstance().register(RoomRepository.class, new RoomRepositoryInMemory());
+        ServiceLocator.getInstance().register(RoomRepository.class, new InMemoryRoomRepository());
         ServiceLocator.getInstance().register(RoomRequestRepository.class, new RoomRequestRepositoryInMemory());
         ServiceLocator.getInstance().register(SimpleSmtpServer.class, SimpleSmtpServer.start(SMTP_PORT));
         ServiceLocator.getInstance().register(NotificationSenderStrategy.class, new JavaxMailSenderStrategy(new JavaxMailSender(getMailProperties(SMTP_PORT))));
@@ -43,9 +44,9 @@ public class InMemoryDemoContext extends ContextBase {
     protected void applyFillers() {
 
         RoomRepository roomRepository = ServiceLocator.getInstance().resolve(RoomRepository.class);
-        Room room1 = new Room(new RoomNumber("PLT-3904"), 50);
-        Room room2 = new Room(new RoomNumber("PLT-2551"), 30);
-        Room room3 = new Room(new RoomNumber("VCH-2860"), 75);
+        Room room1 = new StandardRoom(new RoomNumber("PLT-3904"), 50);
+        Room room2 = new StandardRoom(new RoomNumber("PLT-2551"), 30);
+        Room room3 = new StandardRoom(new RoomNumber("VCH-2860"), 75);
 
         roomRepository.persist(room1);
         roomRepository.persist(room2);

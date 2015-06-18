@@ -1,14 +1,12 @@
 package ca.ulaval.ift6002.sputnik.uat.context;
 
-import org.jbehave.core.annotations.AfterStories;
-import org.jbehave.core.annotations.BeforeScenario;
-import org.jbehave.core.annotations.BeforeStories;
+import org.jbehave.core.annotations.*;
 
 public class SputnitUATRunner {
     private static UatContext context;
 
     @BeforeStories
-    public static void start() throws Exception {
+    public static void start() {
         context = new UatContext();
         context.apply();
     }
