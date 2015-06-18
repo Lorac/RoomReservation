@@ -134,6 +134,23 @@
                 </plugins>
             </build>
         </profile>
+        <profile>
+              <!-- Run FindBugs for better error detection. Run as "mvn -Pfindbugs install site". -->
+        <id>findbugs</id>
+        <reporting>
+                <plugins>
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>findbugs-maven-plugin</artifactId>
+                        <configuration>
+                            <effort>Max</effort>
+                            <threshold>High</threshold>
+                            <excludeFilterFile>src/findbugs-filter.xml</excludeFilterFile>
+                        </configuration>
+                    </plugin>
+                </plugins>
+        </reporting>
+        </profile>
     </profiles>
 
 
