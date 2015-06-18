@@ -1,24 +1,17 @@
 package ca.ulaval.ift6002.sputnik.uat.steps;
 
 import ca.ulaval.ift6002.sputnik.applicationservice.reservations.ReservationApplicationService;
-import ca.ulaval.ift6002.sputnik.applicationservice.reservations.RoomRequestForm;
 import ca.ulaval.ift6002.sputnik.applicationservice.shared.locator.ServiceLocator;
-import ca.ulaval.ift6002.sputnik.domain.core.request.RequestIdentifier;
-import ca.ulaval.ift6002.sputnik.domain.core.request.RoomRequest;
-import ca.ulaval.ift6002.sputnik.domain.core.request.RoomRequestRepository;
-import ca.ulaval.ift6002.sputnik.domain.core.room.RoomNumber;
-import ca.ulaval.ift6002.sputnik.domain.core.room.RoomRepository;
-import ca.ulaval.ift6002.sputnik.domain.core.room.StandardRoom;
+import ca.ulaval.ift6002.sputnik.domain.core.mailbox.Mailbox;
+import ca.ulaval.ift6002.sputnik.domain.core.request.*;
+import ca.ulaval.ift6002.sputnik.domain.core.room.*;
 import ca.ulaval.ift6002.sputnik.domain.core.user.User;
 import ca.ulaval.ift6002.sputnik.strategy.assignation.FindRoomStrategy;
 import ca.ulaval.ift6002.sputnik.strategy.assignation.MaximizeRoomUsageStrategy;
 import ca.ulaval.ift6002.sputnik.uat.steps.MaximizeRoomUsageSteps.MaximizeRoomUsageStepsState;
-import ca.ulaval.ift6002.sputnik.uat.steps.fixtures.RoomRequestBuilder;
 import ca.ulaval.ift6002.sputnik.uat.steps.state.StatefulStep;
 import ca.ulaval.ift6002.sputnik.uat.steps.state.StepState;
-import org.jbehave.core.annotations.Given;
-import org.jbehave.core.annotations.Then;
-import org.jbehave.core.annotations.When;
+import org.jbehave.core.annotations.*;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -29,8 +22,8 @@ import static junit.framework.TestCase.assertTrue;
 public class MaximizeRoomUsageSteps extends StatefulStep<MaximizeRoomUsageStepsState> {
 
     private final static int NUMBER_OF_ATTENDEES = 12;
-    private final static String EMAIL_ORGANIZER = "organizer@ca.ulaval.ift6002.sputnik.com";
-    private final static String EMAIL_ATTENDEES = "attendees%s@ca.ulaval.ift6002.sputnik.com";
+    private final static String EMAIL_ORGANIZER = "organizer@sputnik.com";
+    private final static String EMAIL_ATTENDEES = "attendees%s@c.sputnik.com";
     private static final int NUMBER_OF_ROOM_FOUND = 1;
 
     protected MaximizeRoomUsageStepsState getInitialState() {
@@ -39,11 +32,10 @@ public class MaximizeRoomUsageSteps extends StatefulStep<MaximizeRoomUsageStepsS
 
     @Given("a room request with attendees")
     public void givenARoomRequestWithAttendees() {
-
-        state().roomRequest = RoomRequestBuilder.createValid(NUMBER_OF_ATTENDEES).buildForm();
+        state().roomRequest = new StandardRoomRequest(RequestIdentifier.create(), Priority.NORMAL, new User(EMAIL_ORGANIZER), getAttendees(NUMBER_OF_ATTENDEES));
         switchToMaximumRoomUsageStrategy();
-        ReservationApplicationService reservationApplicationService = getReservationApplicationService();
-        reservationApplicationService.addRequest(state().roomRequest);
+        Mailbox mailbox = getMailbox();
+        mailbox.add(state().roomRequest);
     }
 
     @Given("multiple unreserved rooms of different capacities")
@@ -79,7 +71,7 @@ public class MaximizeRoomUsageSteps extends StatefulStep<MaximizeRoomUsageStepsS
 
     @Then("any room fitting the request needs is found")
     public void thenARoomIsFound() {
-        RoomRequestRepository roomRequestRepository = getReservationRepository();
+        RoomRequestRepository roomRequestRepository = getRoomRequestRepository();
         assertTrue(roomRequestRepository.findAll().size() == NUMBER_OF_ROOM_FOUND);
     }
 
@@ -94,7 +86,7 @@ public class MaximizeRoomUsageSteps extends StatefulStep<MaximizeRoomUsageStepsS
         return ServiceLocator.getInstance().resolve(RoomRepository.class);
     }
 
-    private RoomRequestRepository getReservationRepository() {
+    private RoomRequestRepository getRoomRequestRepository() {
         return ServiceLocator.getInstance().resolve(RoomRequestRepository.class);
     }
 
@@ -106,12 +98,16 @@ public class MaximizeRoomUsageSteps extends StatefulStep<MaximizeRoomUsageStepsS
         return attendees;
     }
 
+    private Mailbox getMailbox() {
+        return ServiceLocator.getInstance().resolve(Mailbox.class);
+    }
+
     private ReservationApplicationService getReservationApplicationService() {
         return ServiceLocator.getInstance().resolve(ReservationApplicationService.class);
     }
 
-    private RoomRequest findReservationWithRequest(RoomRequestForm roomRequest) {
-        RoomRequestRepository roomRequestRepository = getReservationRepository();
+    private RoomRequest findReservationWithRequest(RoomRequest roomRequest) {
+        RoomRequestRepository roomRequestRepository = getRoomRequestRepository();
         RequestIdentifier identifier = roomRequest.getIdentifier();
         return (RoomRequest) roomRequestRepository.findReservationByIdentifier(identifier);
     }

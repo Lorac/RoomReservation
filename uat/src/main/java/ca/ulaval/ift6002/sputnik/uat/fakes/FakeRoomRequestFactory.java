@@ -10,9 +10,9 @@ public class FakeRoomRequestFactory implements RoomRequestFactory {
     public RequestIdentifier lastCreatedIdentifier;
 
     @Override
-    public RoomRequest create(String organizerEmail, int numberOfPeople, Priority priority) {
+    public RoomRequest create(String organizerEmail, int numberOfPeople, int priority) {
         RequestIdentifier identifier = RequestIdentifier.create();
         lastCreatedIdentifier = identifier;
-        return new StandardRoomRequest(identifier, priority, new User(organizerEmail), new ArrayList<>(numberOfPeople));
+        return new StandardRoomRequest(identifier, Priority.fromInteger(priority), new User(organizerEmail), new ArrayList<>(numberOfPeople));
     }
 }

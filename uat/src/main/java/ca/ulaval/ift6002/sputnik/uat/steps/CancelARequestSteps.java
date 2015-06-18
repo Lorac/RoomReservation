@@ -2,6 +2,7 @@ package ca.ulaval.ift6002.sputnik.uat.steps;
 
 import ca.ulaval.ift6002.sputnik.applicationservice.reservations.ReservationApplicationService;
 import ca.ulaval.ift6002.sputnik.applicationservice.shared.locator.ServiceLocator;
+import ca.ulaval.ift6002.sputnik.domain.core.mailbox.Mailbox;
 import ca.ulaval.ift6002.sputnik.domain.core.request.*;
 import ca.ulaval.ift6002.sputnik.domain.core.room.*;
 import ca.ulaval.ift6002.sputnik.domain.core.user.User;
@@ -28,8 +29,8 @@ public class CancelARequestSteps extends StatefulStep<CancelARequestStepsState> 
     public void givenARoomRequestWithoutARoomAssigned() {
         state().roomRequest = new StandardRoomRequest(RequestIdentifier.create(), Priority.NORMAL, new User(emailOrganizer), new LinkedList<>());
 
-        ReservationApplicationService reservationApplicationService = getReservationApplicationService();
-        reservationApplicationService.addRequest(state().roomRequest);
+        Mailbox mailbox = getMailbox();
+        mailbox.add(state().roomRequest);
     }
 
     @Given("a room request with a room assigned")
@@ -38,8 +39,8 @@ public class CancelARequestSteps extends StatefulStep<CancelARequestStepsState> 
         Room room = persistARoom();
         state().roomRequest.assignRoom(room);
 
-        ReservationApplicationService reservationApplicationService = getReservationApplicationService();
-        reservationApplicationService.addRequest(state().roomRequest);
+        Mailbox mailbox = getMailbox();
+        mailbox.add(state().roomRequest);
     }
 
     private Room persistARoom() {
@@ -86,6 +87,10 @@ public class CancelARequestSteps extends StatefulStep<CancelARequestStepsState> 
         state().roomRequest = new StandardRoomRequest(RequestIdentifier.create(), Priority.NORMAL, new User(emailOrganizer), new LinkedList<>());
         RoomRequestRepository roomRequestRepository = getReservationRepository();
         roomRequestRepository.persist(state().roomRequest);
+    }
+
+    private Mailbox getMailbox() {
+        return ServiceLocator.getInstance().resolve(Mailbox.class);
     }
 
     private RoomRequestRepository getReservationRepository() {

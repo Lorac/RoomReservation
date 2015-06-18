@@ -29,24 +29,29 @@ public class AssignRoomsPeriodicallyToRoomRequestSteps extends StatefulStep<Assi
 
     @Given("a first room request")
     public void givenAFirstRoomRequest() {
-        ReservationApplicationService reservationApplicationService = getReservationApplicationService();
+        Mailbox mailbox = getMailbox();
+
         state().firstRequest = new StandardRoomRequest(RequestIdentifier.create(), Priority.NORMAL, new User(EMAIL), new LinkedList<>());
-        reservationApplicationService.addRequest(state().firstRequest);
+
+        mailbox.add(state().firstRequest);
     }
 
     @Given("a second room request")
     public void givenASecondRoomRequest() {
-        ReservationApplicationService reservationApplicationService = getReservationApplicationService();
+        Mailbox mailbox = getMailbox();
+
         state().secondRequest = new StandardRoomRequest(RequestIdentifier.create(), Priority.NORMAL, new User(EMAIL), new LinkedList<>());
-        reservationApplicationService.addRequest(state().secondRequest);
+
+        mailbox.add(state().secondRequest);
     }
 
     @Given("multiple room requests")
     public void givenAnAmountOfRoomRequest() {
-        ReservationApplicationService reservationApplicationService = getReservationApplicationService();
+        Mailbox mailbox = getMailbox();
+
         for (int i = 0; i < FIVE; i++) {
             RoomRequest roomRequest = new StandardRoomRequest(RequestIdentifier.create(), Priority.NORMAL, new User(EMAIL), new LinkedList<>());
-            reservationApplicationService.addRequest(roomRequest);
+            mailbox.add(roomRequest);
         }
     }
 
@@ -62,15 +67,15 @@ public class AssignRoomsPeriodicallyToRoomRequestSteps extends StatefulStep<Assi
     public void givenARoomRequestWithPriorityLow() {
         switchToPrioritySortingStrategy();
         state().lowPriorityRequest = new StandardRoomRequest(RequestIdentifier.create(), Priority.LOW, new User(EMAIL), new LinkedList<>());
-        ReservationApplicationService reservationApplicationService = getReservationApplicationService();
-        reservationApplicationService.addRequest(state().lowPriorityRequest);
+        Mailbox mailbox = getMailbox();
+        mailbox.add(state().lowPriorityRequest);
     }
 
     @Given("a room request with high priority")
     public void givenARoomRequestWithPriorityHigh() {
         state().highPriorityRequest = new StandardRoomRequest(RequestIdentifier.create(), Priority.HIGH, new User(EMAIL), new LinkedList<>());
-        ReservationApplicationService reservationApplicationService = getReservationApplicationService();
-        reservationApplicationService.addRequest(state().highPriorityRequest);
+        Mailbox mailbox = getMailbox();
+        mailbox.add(state().highPriorityRequest);
     }
 
     @When("the room requests are processed")
@@ -103,6 +108,10 @@ public class AssignRoomsPeriodicallyToRoomRequestSteps extends StatefulStep<Assi
 
     private RoomRepository getRoomRepository() {
         return ServiceLocator.getInstance().resolve(RoomRepository.class);
+    }
+
+    private Mailbox getMailbox() {
+        return ServiceLocator.getInstance().resolve(Mailbox.class);
     }
 
     private RoomRequestRepository getReservationRepository() {

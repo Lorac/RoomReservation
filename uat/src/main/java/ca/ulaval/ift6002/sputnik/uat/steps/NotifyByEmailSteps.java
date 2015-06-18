@@ -2,6 +2,7 @@ package ca.ulaval.ift6002.sputnik.uat.steps;
 
 import ca.ulaval.ift6002.sputnik.applicationservice.reservations.ReservationApplicationService;
 import ca.ulaval.ift6002.sputnik.applicationservice.shared.locator.ServiceLocator;
+import ca.ulaval.ift6002.sputnik.domain.core.mailbox.Mailbox;
 import ca.ulaval.ift6002.sputnik.domain.core.notification.*;
 import ca.ulaval.ift6002.sputnik.domain.core.request.*;
 import ca.ulaval.ift6002.sputnik.domain.core.room.*;
@@ -20,10 +21,10 @@ import static junit.framework.TestCase.assertEquals;
 public class NotifyByEmailSteps extends StatefulStep<NotifyByEmailAfterProcessingStepsState> {
 
     private static final RoomNumber ROOM_NUMBER = new RoomNumber("SPUT-1");
+    private static final String EMAIL_ORGANIZER = "organizer@sputnik.com";
     private final int NUMBER_OF_EMAIL_FOR_ORGANIZER_AND_RESERVATION_CLERK = 1;
     private final int NUMBER_OF_EMAIL_FOR_ATTENDEES = 1;
-    private final String emailAttendees = "attendees%s@ca.ulaval.ift6002.sputnik.com";
-    private final String emailOrganizer = "organizer@ca.ulaval.ift6002.sputnik.com";
+    private final String emailAttendees = "attendees%s@sputnik.com";
     private final Room ASSIGNED_ROOM = new StandardRoom(ROOM_NUMBER, 10);
 
     protected NotifyByEmailAfterProcessingStepsState getInitialState() {
@@ -32,21 +33,20 @@ public class NotifyByEmailSteps extends StatefulStep<NotifyByEmailAfterProcessin
 
     @Given("a room request")
     public void givenARoomRequest() {
-        state().roomRequest = new StandardRoomRequest(RequestIdentifier.create(), Priority.NORMAL, new User(emailOrganizer), new LinkedList<>());
-        ReservationApplicationService reservationApplicationService = getReservationApplicationService();
-        reservationApplicationService.addRequest(state().roomRequest);
+        state().roomRequest = new StandardRoomRequest(RequestIdentifier.create(), Priority.NORMAL, new User(EMAIL_ORGANIZER), new LinkedList<>());
+        Mailbox mailbox = getMailbox();
+        mailbox.add(state().roomRequest);
     }
 
     @Given("a room request with an assigned room")
     public void givenRoomRequestWithAnAssignedRoom() {
         RoomRepository repository = getRoomRepository();
+        RoomRequestRepository requestRepository = getRoomRequestRepository();
         repository.persist(ASSIGNED_ROOM);
 
-        state().roomRequest = new StandardRoomRequest(RequestIdentifier.create(), Priority.NORMAL, new User(emailOrganizer), new LinkedList<>());
+        state().roomRequest = new StandardRoomRequest(RequestIdentifier.create(), Priority.NORMAL, new User(EMAIL_ORGANIZER), new LinkedList<>());
         state().roomRequest.assignRoom(ASSIGNED_ROOM);
-
-        ReservationApplicationService reservationApplicationService = getReservationApplicationService();
-        reservationApplicationService.addRequest(state().roomRequest);
+        requestRepository.persist(state().roomRequest);
     }
 
     @Given("$roomCount unreserved rooms")
@@ -134,6 +134,10 @@ public class NotifyByEmailSteps extends StatefulStep<NotifyByEmailAfterProcessin
         return attendees;
     }
 
+    private Mailbox getMailbox() {
+        return ServiceLocator.getInstance().resolve(Mailbox.class);
+    }
+
     private RoomRepository getRoomRepository() {
         return ServiceLocator.getInstance().resolve(RoomRepository.class);
     }
@@ -156,7 +160,10 @@ public class NotifyByEmailSteps extends StatefulStep<NotifyByEmailAfterProcessin
         return (RoomRequest) roomRequestRepository.findReservationByIdentifier(identifier);
     }
 
-    public class NotifyByEmailAfterProcessingStepsState extends StepState {
+    public RoomRequestRepository getRoomRequestRepository() {
+        return ServiceLocator.getInstance().resolve(RoomRequestRepository.class);
+    }
 
+    public class NotifyByEmailAfterProcessingStepsState extends StepState {
     }
 }
