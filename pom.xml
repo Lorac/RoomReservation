@@ -135,7 +135,7 @@
             </build>
         </profile>
         <profile>
-              <!-- Run FindBugs for better error detection. Run as "mvn -Pfindbugs install site". -->
+              <!-- Run FindBugs for better error detection. Run as "mvn -Pfindbugs install". -->
         <id>findbugs</id>
         <reporting>
                 <plugins>
