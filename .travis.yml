@@ -5,5 +5,3 @@ install:
   - mvn test -Ptravis
 after_success: 
   - mvn clean test jacoco:report coveralls:report -Ptravis
-env:
-  - TEST_SUITE=units
