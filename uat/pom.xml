@@ -48,11 +48,7 @@
             <artifactId>emailsender</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
-        <dependency>
-            <groupId>org.reflections</groupId>
-            <artifactId>reflections</artifactId>
-            <version>0.9.10</version>
-        </dependency>
+
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
@@ -89,20 +85,79 @@
                 </configuration>
             </plugin>
             <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>exec-maven-plugin</artifactId>
-                <version>1.3</version>
+                <groupId>org.jbehave</groupId>
+                <artifactId>jbehave-maven-plugin</artifactId>
+                <version>4.0.1</version>
                 <executions>
                     <execution>
+                        <id>run-stories-as-embeddables</id>
+                        <phase>integration-test</phase>
                         <configuration>
-                            <mainClass>
-                                ca.ulaval.ift6002.sputnik.uat.SputnikStories
-                            </mainClass>
+                            <includes>
+                                <include>**/*Stories.java</include>
+                            </includes>
+                            <excludes/>
+                            <generateViewAfterStories>true</generateViewAfterStories>
+                            <generateViewAfterStories>true</generateViewAfterStories>
+                            <systemProperties>
+                                <property>
+                                    <name>java.awt.headless</name>
+                                    <value>true</value>
+                                </property>
+                            </systemProperties>
                         </configuration>
                         <goals>
-                            <goal>java</goal>
+                            <goal>run-stories-as-embeddables</goal>
                         </goals>
-                        <phase>integration-test</phase>
+                    </execution>
+                </executions>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.reflections</groupId>
+                        <artifactId>reflections</artifactId>
+                        <version>0.9.10</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>unpack-jbehave-site-resources</id>
+                        <phase>generate-resources</phase>
+                        <goals>
+                            <goal>unpack</goal>
+                        </goals>
+                        <configuration>
+                            <artifactItems>
+                                <artifactItem>
+                                    <groupId>org.jbehave.site</groupId>
+                                    <artifactId>jbehave-site-resources</artifactId>
+                                    <version>3.1.1</version>
+                                    <type>zip</type>
+                                    <outputDirectory>${project.build.directory}/jbehave/view</outputDirectory>
+                                </artifactItem>
+                            </artifactItems>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>unpack-jbehave-reports-resources</id>
+                        <phase>generate-resources</phase>
+                        <goals>
+                            <goal>unpack</goal>
+                        </goals>
+                        <configuration>
+                            <artifactItems>
+                                <artifactItem>
+                                    <groupId>org.jbehave</groupId>
+                                    <artifactId>jbehave-core</artifactId>
+                                    <version>3.1.2</version>
+                                    <outputDirectory>${project.build.directory}/jbehave/view</outputDirectory>
+                                    <includes>**\/*.css,**\/*.ftl,**\/*.js</includes>
+                                </artifactItem>
+                            </artifactItems>
+                        </configuration>
                     </execution>
                 </executions>
             </plugin>
