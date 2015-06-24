@@ -107,7 +107,7 @@
             </plugin>
         </plugins>
     </build>
-    
+
     <profiles>
         <profile>
             <id>travis</id>
@@ -125,6 +125,10 @@
                                 </goals>
                             </execution>
                         </executions>
+                        <configuration>
+                            <destFile>${sonar.jacoco.reportPath}</destFile>
+                            <append>true</append>
+                        </configuration>
                     </plugin>
                     <plugin>
                         <groupId>org.eluder.coveralls</groupId>
@@ -135,21 +139,23 @@
             </build>
         </profile>
         <profile>
-              <!-- Run FindBugs for better error detection. Run as "mvn -Pfindbugs install". -->
-        <id>findbugs</id>
-        <reporting>
+            <!-- Run FindBugs for better error detection. Run as "mvn -Pfindbugs install site". -->
+            <id>findbugs</id>
+            <reporting>
                 <plugins>
                     <plugin>
                         <groupId>org.codehaus.mojo</groupId>
                         <artifactId>findbugs-maven-plugin</artifactId>
+                        <version>3.0.1</version>
                         <configuration>
                             <effort>Max</effort>
                             <threshold>High</threshold>
-                            <excludeFilterFile>src/findbugs-filter.xml</excludeFilterFile>
+                            <xmlOutput>true</xmlOutput>
+                            <xmlOutputDirectory>target/site</xmlOutputDirectory>
                         </configuration>
                     </plugin>
                 </plugins>
-        </reporting>
+            </reporting>
         </profile>
     </profiles>
 
