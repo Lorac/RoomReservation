@@ -4,7 +4,7 @@ import ca.ulaval.ift6002.sputnik.applicationservice.shared.persistence.EntityMan
 
 import javax.persistence.EntityManager;
 
-abstract class HibernateRepository {
+abstract class HibernateRepository<T> {
 
     EntityManager entityManager = null;
 
@@ -15,4 +15,6 @@ abstract class HibernateRepository {
     HibernateRepository(EntityManager entityManager) {
         this.entityManager = entityManager;
     }
+
+    public abstract void update(T t);
 }

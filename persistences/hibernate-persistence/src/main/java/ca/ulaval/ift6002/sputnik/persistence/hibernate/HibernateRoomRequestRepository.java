@@ -9,7 +9,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.criteria.*;
 import java.util.List;
 
-public class HibernateRoomRequestRepository extends HibernateRepository implements RoomRequestRepository<HibernateRoomRequest> {
+public class HibernateRoomRequestRepository extends HibernateRepository<HibernateRoomRequest> implements RoomRequestRepository<HibernateRoomRequest> {
 
     public HibernateRoomRequestRepository() {
         super();
