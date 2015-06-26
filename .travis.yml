@@ -1,5 +1,7 @@
 language: java
 jdk:
   - oraclejdk8
-env:
-  - TEST_SUITE=units
+install: 
+  - mvn test -Ptravis
+after_success: 
+  - mvn clean test jacoco:report coveralls:report -Ptravis
