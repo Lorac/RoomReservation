@@ -11,7 +11,7 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import java.util.List;
 
-public class HibernateRoomRequestRepository extends HibernateRepository implements RoomRequestRepository<HibernateRoomRequest> {
+public class HibernateRoomRequestRepository extends HibernateRepository<HibernateRoomRequest> implements RoomRequestRepository<HibernateRoomRequest> {
 
     public HibernateRoomRequestRepository() {
         super();

@@ -23,11 +23,6 @@ public class RoomRequestRepositoryInMemory implements RoomRequestRepository<Room
     }
 
     @Override
-    public void update(RoomRequest roomRequest) {
-        persist(roomRequest);
-    }
-
-    @Override
     public void persist(RoomRequest reservation) {
         reservations.put(reservation.getIdentifier(), reservation);
     }

@@ -1,17 +1,13 @@
 package ca.ulaval.ift6002.sputnik.persistence.hibernate;
 
 import ca.ulaval.ift6002.sputnik.domain.core.hibernate.room.HibernateRoom;
-import ca.ulaval.ift6002.sputnik.domain.core.room.RoomNotFoundException;
-import ca.ulaval.ift6002.sputnik.domain.core.room.RoomNumber;
-import ca.ulaval.ift6002.sputnik.domain.core.room.RoomRepository;
+import ca.ulaval.ift6002.sputnik.domain.core.room.*;
 
 import javax.persistence.EntityManager;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
+import javax.persistence.criteria.*;
 import java.util.List;
 
-public class HibernateRoomRepository extends HibernateRepository implements RoomRepository<HibernateRoom> {
+public class HibernateRoomRepository extends HibernateRepository<HibernateRoom> implements RoomRepository<HibernateRoom> {
 
     public HibernateRoomRepository() {
         super();
@@ -37,6 +33,13 @@ public class HibernateRoomRepository extends HibernateRepository implements Room
         Root<HibernateRoom> root = cq.from(HibernateRoom.class);
         cq.select(root);
         return entityManager.createQuery(cq).getResultList();
+    }
+
+    @Override
+    public void update(HibernateRoom hibernateRoom) {
+        entityManager.getTransaction().begin();
+        entityManager.merge(hibernateRoom);
+        entityManager.getTransaction().commit();
     }
 
     @Override

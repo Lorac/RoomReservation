@@ -12,7 +12,7 @@ import java.util.List;
 public class MongoDBRoomRepository extends BasicDAO<MongoRoom, RoomNumber> implements RoomRepository<MongoRoom> {
 
 
-    MongoDBRoomRepository(MongoClient mongoClient, Morphia morphia, String dbName) {
+    public MongoDBRoomRepository(MongoClient mongoClient, Morphia morphia, String dbName) {
         super(mongoClient, morphia, dbName);
     }
 
@@ -20,7 +20,7 @@ public class MongoDBRoomRepository extends BasicDAO<MongoRoom, RoomNumber> imple
     public MongoRoom findRoomByNumber(RoomNumber roomNumber) {
         MongoRoom room = findOne("roomNumber", roomNumber);
         if (room == null) {
-            throw new RoomNotFoundException(String.format("Couldn't find the room with number '%s'.", roomNumber));
+            throw new RoomNotFoundException(String.format("Couldn't find the room with number '%s'.", roomNumber.describe()));
         }
         return room;
     }

@@ -8,7 +8,5 @@ public interface RoomRequestRepository<T> {
 
     List<T> findAll();
 
-    void update(T roomRequest);
-
     void persist(T roomRequest);
 }

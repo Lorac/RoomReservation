@@ -4,13 +4,9 @@ import ca.ulaval.ift6002.sputnik.applicationservice.shared.persistence.EntityMan
 import ca.ulaval.ift6002.sputnik.domain.core.hibernate.room.HibernateRoom;
 import ca.ulaval.ift6002.sputnik.domain.core.room.Room;
 import ca.ulaval.ift6002.sputnik.domain.core.room.RoomNumber;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.*;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
+import javax.persistence.*;
 import java.util.List;
 
 import static org.junit.Assert.assertTrue;
@@ -49,6 +45,16 @@ public class HibernateRoomRepositoryITest {
         List<HibernateRoom> all = repository.findAll();
 
         assertTrue("Should not contain a room", all.isEmpty());
+    }
+
+    @Test
+    public void whenPersistingARoomThenUpdatingShouldReturnWithTheNewRoomUpdated() {
+        HibernateRoom room = new HibernateRoom(ROOM_NUMBER, ROOM_CAPACITY);
+        repository.persist(room);
+        room.reserve();
+        repository.update(room);
+
+        assertTrue(room.isReserved());
     }
 
     public static class EntityManagerFactoryProviderForTest {
