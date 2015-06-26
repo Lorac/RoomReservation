@@ -2,7 +2,7 @@ package ca.ulaval.ift6002.sputnik.persistence.hibernate;
 
 import ca.ulaval.ift6002.sputnik.applicationservice.shared.persistence.EntityManagerProvider;
 import ca.ulaval.ift6002.sputnik.domain.core.hibernate.room.HibernateRoom;
-import ca.ulaval.ift6002.sputnik.domain.core.hibernate.room.HibernateRoomRequest;
+import ca.ulaval.ift6002.sputnik.domain.core.hibernate.roomrequest.HibernateRoomRequest;
 import ca.ulaval.ift6002.sputnik.domain.core.request.*;
 import ca.ulaval.ift6002.sputnik.domain.core.room.Room;
 import ca.ulaval.ift6002.sputnik.domain.core.room.RoomNumber;

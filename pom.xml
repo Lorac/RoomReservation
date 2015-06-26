@@ -68,7 +68,7 @@
         <jetty-server.version>9.3.0.v20150612</jetty-server.version>
         <jersey-container-jetty-servlet.version>2.18</jersey-container-jetty-servlet.version>
         <morphia.version>1.0.1</morphia.version>
-        <jackson.annotation.version>2.6.0-rc2</jackson.annotation.version>
+        <jackson.annotation.version>2.6.0-rc3</jackson.annotation.version>
         <commons-lang3.version>3.4</commons-lang3.version>
     </properties>
 

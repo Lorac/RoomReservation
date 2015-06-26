@@ -1,7 +1,9 @@
 package ca.ulaval.ift6002.sputnik.interfaces.rest.resources;
 
 import ca.ulaval.ift6002.sputnik.applicationservice.reservations.*;
+import ca.ulaval.ift6002.sputnik.applicationservice.shared.locator.ServiceLocator;
 import ca.ulaval.ift6002.sputnik.domain.core.request.*;
+import ca.ulaval.ift6002.sputnik.domain.core.room.RoomNumber;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -16,7 +18,7 @@ public class RoomRequestResource {
     private final ReservationApplicationService service;
 
     public RoomRequestResource() {
-        service = new ReservationApplicationService();
+        service = ServiceLocator.getInstance().resolve(ReservationApplicationService.class);
     }
 
     public RoomRequestResource(ReservationApplicationService service) {
@@ -46,7 +48,23 @@ public class RoomRequestResource {
         } catch (RoomRequestNotFoundException ex) {
             return Response.status(Response.Status.NOT_FOUND).entity(ex.getMessage()).build();
         }
-        return Response.accepted(roomRequest).build();
+
+        RoomRequestJSONRepresentation form = createJsonRepresentation(roomRequest);
+
+        return Response.accepted(form).build();
+    }
+
+    private RoomRequestJSONRepresentation createJsonRepresentation(RoomRequest roomRequest) {
+        RoomRequestJSONRepresentation form = new RoomRequestJSONRepresentation();
+        form.numberOfPeople = roomRequest.getNumberOfSeatsNeeded();
+        form.organizerEmail = roomRequest.getOrganizer().getEmail();
+        form.status = roomRequest.getStatus();
+
+        RoomNumber roomNumber = roomRequest.getRoomNumber();
+        if (roomNumber != null) {
+            form.roomNumber = roomNumber.describe();
+        }
+        return form;
     }
 
     private String convertToUrl(String patientIdentifier,

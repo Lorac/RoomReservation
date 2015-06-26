@@ -11,7 +11,7 @@
 
     <class>ca.ulaval.ift6002.sputnik.domain.core.hibernate.room.HibernateRoom</class>
     <class>ca.ulaval.ift6002.sputnik.domain.core.room.RoomNumber</class>
-    <class>ca.ulaval.ift6002.sputnik.domain.core.hibernate.room.HibernateRoomRequest</class>
+    <class>ca.ulaval.ift6002.sputnik.domain.core.hibernate.roomrequest.HibernateRoomRequest</class>
     <class>ca.ulaval.ift6002.sputnik.domain.core.user.User</class>
         <exclude-unlisted-classes>false</exclude-unlisted-classes>
 

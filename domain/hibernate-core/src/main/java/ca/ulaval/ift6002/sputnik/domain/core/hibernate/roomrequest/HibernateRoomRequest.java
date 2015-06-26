@@ -1,4 +1,4 @@
-package ca.ulaval.ift6002.sputnik.domain.core.hibernate.room;
+package ca.ulaval.ift6002.sputnik.domain.core.hibernate.roomrequest;
 
 import ca.ulaval.ift6002.sputnik.domain.core.request.*;
 import ca.ulaval.ift6002.sputnik.domain.core.room.RoomNumber;

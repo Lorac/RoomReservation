@@ -6,7 +6,7 @@ import ca.ulaval.ift6002.sputnik.applicationservice.shared.locator.ServiceLocato
 import ca.ulaval.ift6002.sputnik.applicationservice.shared.persistence.EntityManagerFactoryProvider;
 import ca.ulaval.ift6002.sputnik.applicationservice.shared.persistence.EntityManagerProvider;
 import ca.ulaval.ift6002.sputnik.domain.core.hibernate.room.HibernateRoom;
-import ca.ulaval.ift6002.sputnik.domain.core.hibernate.room.HibernateRoomRequest;
+import ca.ulaval.ift6002.sputnik.domain.core.hibernate.roomrequest.HibernateRoomRequest;
 import ca.ulaval.ift6002.sputnik.domain.core.mailbox.Mailbox;
 import ca.ulaval.ift6002.sputnik.domain.core.notification.NotificationFactory;
 import ca.ulaval.ift6002.sputnik.domain.core.notification.NotificationSenderStrategy;
@@ -41,7 +41,7 @@ import java.util.concurrent.TimeUnit;
 public class HibernateDemoContext extends ContextBase {
 
     private static final int EMAIL_THRESHOLD = 50;
-    private static final int SMTP_PORT = 8080;
+    private static final int SMTP_PORT = 9875;
 
     @Override
     protected void registerServices() {
@@ -61,7 +61,6 @@ public class HibernateDemoContext extends ContextBase {
     @Override
     protected void applyFillers() {
         RoomRepository roomRepository = ServiceLocator.getInstance().resolve(RoomRepository.class);
-        RoomRequestRepository roomRequestRepository = ServiceLocator.getInstance().resolve(RoomRequestRepository.class);
         Room room1 = new HibernateRoom(new RoomNumber("PLT-3904"), 50);
         Room room2 = new HibernateRoom(new RoomNumber("PLT-2551"), 30);
         Room room3 = new HibernateRoom(new RoomNumber("VCH-2860"), 75);
@@ -69,29 +68,6 @@ public class HibernateDemoContext extends ContextBase {
         roomRepository.persist(room1);
         roomRepository.persist(room2);
         roomRepository.persist(room3);
-
-        RequestIdentifier requestIdentifier1 = RequestIdentifier.create();
-        RequestIdentifier requestIdentifier2 = RequestIdentifier.create();
-        RequestIdentifier requestIdentifier3 = RequestIdentifier.create();
-
-        System.out.println(requestIdentifier1.describe());
-        System.out.println(requestIdentifier2.describe());
-        System.out.println(requestIdentifier3.describe());
-
-        List<User> users = new LinkedList<>();
-        users.add(new User("username1"));
-        users.add(new User("username2"));
-        users.add(new User("username3"));
-        users.add(new User("username4"));
-
-        RoomRequest roomRequest1 = new HibernateRoomRequest(requestIdentifier1, Priority.NORMAL, new User("mroussin@hotmail.com"), users);
-        RoomRequest roomRequest2 = new HibernateRoomRequest(requestIdentifier2, Priority.HIGH, new User("patate@hotmail.com"), new LinkedList<>());
-        RoomRequest roomRequest3 = new HibernateRoomRequest(requestIdentifier3, Priority.LOW, new User("chef@hotmail.com"), new LinkedList<>());
-
-        roomRequestRepository.persist(roomRequest1);
-        roomRequestRepository.persist(roomRequest2);
-        roomRequestRepository.persist(roomRequest3);
-
     }
 
     private Properties getMailProperties(int port) {
@@ -117,8 +93,9 @@ public class HibernateDemoContext extends ContextBase {
         Mailbox mailbox = ServiceLocator.getInstance().resolve(Mailbox.class);
         Runnable runner = reservationService::assignRoomRequest;
 
-        RoomRequestProcessor roomRequestProcessor = new RoomRequestProcessor(mailbox, runner, executorService, 10, TimeUnit.SECONDS, EMAIL_THRESHOLD);
+        RoomRequestProcessor roomRequestProcessor = new RoomRequestProcessor(mailbox, runner, executorService, 1, TimeUnit.MINUTES, EMAIL_THRESHOLD);
         ServiceLocator.getInstance().register(RoomRequestProcessor.class, roomRequestProcessor);
         roomRequestProcessor.startAssignationAtFixedRate(10);
+        mailbox.addObserver(roomRequestProcessor);
     }
 }
