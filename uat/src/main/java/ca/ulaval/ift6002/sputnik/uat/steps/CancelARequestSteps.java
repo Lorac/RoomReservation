@@ -14,6 +14,7 @@ import org.jbehave.core.annotations.*;
 import java.util.LinkedList;
 
 import static junit.framework.TestCase.assertTrue;
+import static org.junit.Assert.assertNotNull;
 
 public class CancelARequestSteps extends StatefulStep<CancelARequestStepsState> {
 
@@ -63,8 +64,9 @@ public class CancelARequestSteps extends StatefulStep<CancelARequestStepsState> 
 
     @Then("the room request is archived")
     public void thenTheRoomRequestIsArchived() {
-        assertTrue(true);
-        // TODO: ajouter l'archivage
+        RoomRequestRepository reservationRepository = getReservationRepository();
+        RoomRequest roomRequest = (RoomRequest) reservationRepository.findReservationByIdentifier(state().roomRequest.getIdentifier());
+        assertNotNull(roomRequest);
     }
 
     @Then("the reservation is cancelled")
